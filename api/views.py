@@ -9,6 +9,7 @@ from .models import Room, Wallet, WithdrawalHistory, DepositHistory, RoomResults
 from .serializers import RoomCreationSerializer, WalletCreationSerializer, DepositHistorySerializer, WithdrawalHistorySerializer, RoomResultsSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
+from decimal import Decimal, InvalidOperation
 import logging
 
 # Set up logging
@@ -333,14 +334,18 @@ def create_withdrawal(request, wallet_id):
     try:
         wallet = Wallet.objects.get(id=wallet_id)
     except Wallet.DoesNotExist:
-        return Response({"error":True,"detail": "Wallet with the given ID not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": True, "detail": "Wallet with the given ID not found."}, status=status.HTTP_404_NOT_FOUND)
 
     # Check if the wallet has sufficient balance
-    withdrawal_amount = request.data.get('withdrawal_amount')
-    if withdrawal_amount:
-        withdrawal_amount = float(withdrawal_amount)
+    withdrawal_amount_str = request.data.get('withdrawal_amount')
+    if withdrawal_amount_str:
+        try:
+            withdrawal_amount = Decimal(withdrawal_amount_str)
+        except (ValueError, InvalidOperation):
+            return Response({"error": True, "detail": "Invalid withdrawal amount."}, status=status.HTTP_400_BAD_REQUEST)
+        
         if wallet.balance < withdrawal_amount:
-            return Response({"error":True,"detail": "Insufficient balance."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": True, "detail": "Insufficient balance."}, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = WithdrawalHistorySerializer(data=request.data, context={'wallet': wallet})
     
