@@ -254,14 +254,23 @@ def create_deposit(request, wallet_id):
     
     if serializer.is_valid():
         deposit = serializer.save()
+        
+         # Build the absolute URL for the proof_screenshot
+        if deposit.proof_screenshot:
+            proof_screenshot_url = request.build_absolute_uri(deposit.proof_screenshot.url)
+        else:
+            proof_screenshot_url = None
+        
         return Response({
+            "error":False,
+            "detail":"Deposit request submitted successfully",
             "wallet_id": deposit.wallet.id,
             "deposit_amount": str(deposit.deposit_amount),
             "deposit_date": deposit.deposit_date.isoformat(),
             "status": deposit.status,
-            "proof_screenshot": deposit.proof_screenshot.url if deposit.proof_screenshot else None
+            "proof_screenshot": proof_screenshot_url
         }, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response({"error":True,"detail":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -324,18 +333,36 @@ def create_withdrawal(request, wallet_id):
     try:
         wallet = Wallet.objects.get(id=wallet_id)
     except Wallet.DoesNotExist:
-        return Response({"error": "Wallet with the given ID not found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error":True,"detail": "Wallet with the given ID not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Check if the wallet has sufficient balance
+    withdrawal_amount = request.data.get('withdrawal_amount')
+    if withdrawal_amount:
+        withdrawal_amount = float(withdrawal_amount)
+        if wallet.balance < withdrawal_amount:
+            return Response({"error":True,"detail": "Insufficient balance."}, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = WithdrawalHistorySerializer(data=request.data, context={'wallet': wallet})
     
     if serializer.is_valid():
         withdrawal = serializer.save()
+
+        # Deduct the withdrawal amount from the wallet balance
+        wallet.balance -= withdrawal_amount
+        wallet.save()
+
         return Response({
             "wallet_id": withdrawal.wallet.id,
             "withdrawal_amount": str(withdrawal.withdrawal_amount),
             "withdrawal_date": withdrawal.withdrawal_date.isoformat(),
-            "status": withdrawal.status
+            "status": withdrawal.status,
+            "selected_tab": withdrawal.selected_tab,
+            "account_holder_name": withdrawal.account_holder_name,
+            "account_number": withdrawal.account_number,
+            "ifsc_code": withdrawal.ifsc_code,
+            "upi_id": withdrawal.upi_id,
         }, status=status.HTTP_201_CREATED)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

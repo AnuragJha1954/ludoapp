@@ -14,6 +14,7 @@ import requests
 from django.http import JsonResponse
 from .models import OTPDetails
 from .serializers import OTPRequestSerializer
+from api.models import Wallet
 import logging
 
 # Set up logging
@@ -40,14 +41,42 @@ def user_login(request):
                 # Generate slug from first name and last name
                 slug = (user.first_name + user.last_name).lower().replace(" ", "")
 
+                # Get wallet details
+                try:
+                    wallet = Wallet.objects.get(user=user)
+                    wallet_details = {
+                        "wallet_id": wallet.id,
+                        "balance": wallet.balance,
+                        "last_modified": wallet.last_modified,
+                    }
+                except Wallet.DoesNotExist:
+                    wallet_details = {
+                        "wallet_id": None,
+                        "balance": 0,
+                        "last_modified": None,
+                    }
+
+                # Metric details
+                metric = {
+                    "played": 0,
+                    "win":0,
+                    "penalty":0,
+                    "referals":0,
+                    "referal_winnings":0,
+                }
+                
                 # Get additional user details
                 user_details = {
                     "id": user.id,
                     "username": user.username,
+                    "phone_number": user.phone_number,
                     "name": user.first_name + " " + user.last_name,
                     "email": user.email,
-                    "slug": slug
-                    }
+                    "slug": slug,
+                    "verified":user.verified,
+                    "wallet": wallet_details,
+                    "metric": metric,
+                }
                 
                 return Response(
                     {

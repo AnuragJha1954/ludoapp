@@ -43,7 +43,12 @@ class DepositHistorySerializer(serializers.ModelSerializer):
 class WithdrawalHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = WithdrawalHistory
-        fields = ['withdrawal_amount']
+        fields = ['withdrawal_amount', 
+            'selected_tab', 
+            'account_holder_name', 
+            'account_number', 
+            'ifsc_code', 
+            'upi_id']
 
     def create(self, validated_data):
         wallet = self.context['wallet']

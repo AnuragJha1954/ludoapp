@@ -48,10 +48,14 @@ class WithdrawalHistory(models.Model):
     withdrawal_amount = models.DecimalField(max_digits=10, decimal_places=2)
     withdrawal_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
+    selected_tab = models.CharField(max_length=50, null=True, blank=True)
+    account_holder_name = models.CharField(max_length=100, null=True, blank=True)
+    account_number = models.CharField(max_length=50, null=True, blank=True)
+    ifsc_code = models.CharField(max_length=11, null=True, blank=True)
+    upi_id = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return f"Withdrawal of {self.withdrawal_amount} from {self.wallet.user.username} on {self.withdrawal_date}"
-
 
 
 
