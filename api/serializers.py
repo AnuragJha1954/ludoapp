@@ -1,5 +1,9 @@
 from rest_framework import serializers
-from .models import Room, Wallet, WithdrawalHistory, DepositHistory, RoomResults
+from .models import Room, Wallet, WithdrawalHistory, DepositHistory, RoomResults,Challenge
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 class RoomCreationSerializer(serializers.ModelSerializer):
     number_of_users = serializers.IntegerField()  # Added to accept number of users
@@ -68,3 +72,21 @@ class RoomResultsSerializer(serializers.ModelSerializer):
         room = self.context['room']
         user = self.context['user']
         return RoomResults.objects.create(room=room, user=user, **validated_data)
+    
+    
+    
+    
+
+
+class ChallengeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Challenge
+        fields = ['challenge_id', 'room', 'created_by', 'opponent', 'status']
+        
+        
+        
+        
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']

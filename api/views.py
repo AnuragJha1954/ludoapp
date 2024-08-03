@@ -6,10 +6,11 @@ from rest_framework.permissions import AllowAny
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .models import Room, Wallet, WithdrawalHistory, DepositHistory, RoomResults,Challenge
-from .serializers import RoomCreationSerializer, WalletCreationSerializer, DepositHistorySerializer, WithdrawalHistorySerializer, RoomResultsSerializer
+from .serializers import RoomCreationSerializer, WalletCreationSerializer, DepositHistorySerializer, WithdrawalHistorySerializer, RoomResultsSerializer, ChallengeSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from decimal import Decimal, InvalidOperation
+import random
 import logging
 
 # Set up logging
@@ -75,7 +76,10 @@ def create_room(request, user_id):
             validated_data = serializer.validated_data
 
             # Retrieve the wallet for the user
-            wallet = Wallet.objects.get(user=user)
+            try:
+                wallet = Wallet.objects.get(user=user)
+            except Wallet.DoesNotExist:
+                return Response({"error": "Wallet not found"}, status=status.HTTP_404_NOT_FOUND)
 
             # Check if the user has enough balance
             if wallet.balance < validated_data['room_amount']:
@@ -88,27 +92,30 @@ def create_room(request, user_id):
             # Create the room
             room = Room.objects.create(user=user, **validated_data)
 
+            # Generate a random challenge ID with format BLxxxxx
+            challenge_id = f"BL{random.randint(10000, 99999)}"
+
             # Create the challenge
             Challenge.objects.create(
+                challenge_id=challenge_id,
                 room=room,
                 created_by=user,
-                number_of_users=validated_data.get('number_of_users', 1)
+                status='O'  # Initial status is 'Open'
             )
 
             # Return the details of the created room
             return Response({
                 "room_id": room.room_id,
                 "user_id": room.user.id,
-                "room_amount": room.room_amount
+                "room_amount": room.room_amount,
+                "challenge_id": challenge_id,
+                "status": 'O'  # Return the initial status
             }, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    except Wallet.DoesNotExist:
-        return Response({"error": "Wallet not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 
@@ -474,26 +481,23 @@ def create_room_result(request, user_id, room_id):
 
 @swagger_auto_schema(
     method='post',
-    operation_summary="Join a Challenge",
-    operation_description="Allows a user to join a challenge if there is an available slot and if the user has sufficient balance.",
-    manual_parameters=[
-        openapi.Parameter('user_id', openapi.IN_PATH, description="ID of the user joining the challenge", type=openapi.TYPE_INTEGER),
-        openapi.Parameter('challenge_id', openapi.IN_PATH, description="ID of the challenge to join", type=openapi.TYPE_INTEGER),
-    ],
+    operation_description="Join a challenge by providing the user ID and challenge ID.",
     responses={
         200: openapi.Response(
             description="Challenge joined successfully",
             examples={
-                'application/json': {
+                "application/json": {
                     "room_id": 1,
+                    "challenge_id": "BL123456",
+                    "status": "R",
                     "message": "Challenge joined successfully"
                 }
             }
         ),
         400: openapi.Response(
-            description="Bad Request",
+            description="Bad request",
             examples={
-                'application/json': {
+                "application/json": {
                     "error": "Insufficient balance"
                 }
             }
@@ -501,19 +505,22 @@ def create_room_result(request, user_id, room_id):
         403: openapi.Response(
             description="Forbidden",
             examples={
-                'application/json': {
+                "application/json": {
                     "error": "User not authenticated or ID mismatch."
                 }
             }
         ),
         404: openapi.Response(
-            description="Not Found",
+            description="Not found",
             examples={
-                'application/json': {
+                "application/json": {
                     "error": "Challenge not found"
+                },
+                "application/json": {
+                    "error": "Wallet not found"
                 }
             }
-        ),
+        )
     }
 )
 @api_view(['POST'])
@@ -522,45 +529,130 @@ def join_challenge(request, user_id, challenge_id):
         user = request.user  # Assumes the user is authenticated and available in request
         if not user or user.id != user_id:
             return Response({"error": "User not authenticated or ID mismatch."}, status=status.HTTP_403_FORBIDDEN)
-        
+
         # Retrieve the challenge
-        challenge = get_object_or_404(Challenge, id=challenge_id)
+        challenge = get_object_or_404(Challenge, challenge_id=challenge_id)
         room = challenge.room  # Access the room related to the challenge
 
         # Retrieve the user's wallet
         wallet = get_object_or_404(Wallet, user=user)
-        
+
         # Check if the user has enough balance
         if wallet.balance < room.room_amount:
             return Response({"error": "Insufficient balance"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check challenge slots and assign the user
-        if not challenge.user1:
-            challenge.user1 = user
-        elif not challenge.user2:
-            challenge.user2 = user
-        elif not challenge.user3:
-            challenge.user3 = user
+        # Check if the opponent slot is available
+        if not challenge.opponent:
+            challenge.opponent = user
         else:
             return Response({"error": "Slots are full"}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Change the status to 'Running' after the opponent has joined
+        challenge.status = 'R'
+        
         # Save the updated challenge
         challenge.save()
         
         # Deduct the room amount from the user's wallet
         wallet.balance -= room.room_amount
         wallet.save()
-        
+
         return Response({
             "room_id": room.room_id,
+            "challenge_id": challenge.challenge_id,
+            "status": challenge.status,
             "message": "Challenge joined successfully"
         }, status=status.HTTP_200_OK)
 
     except Challenge.DoesNotExist:
-        return Response({"error": "Challenge not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error":True,"detail": "Challenge not found"}, status=status.HTTP_404_NOT_FOUND)
     except Wallet.DoesNotExist:
-        return Response({"error": "Wallet not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"error": True,"detail": "Wallet not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error":True,"detail":  str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="Retrieve a list of challenges categorized by their status (open, running, closed) along with details of the created_by and opponent users.",
+    responses={
+        200: openapi.Response(
+            description="Successful Response",
+            examples={
+                "application/json": {
+                    "open_challenges": [
+                        {
+                            "challenge_id": "BL123456",
+                            "room": 1,
+                            "created_by": {"id": 1, "username": "user1", "email": "user1@example.com", "first_name": "User", "last_name": "One"},
+                            "opponent": {"id": 2, "username": "user2", "email": "user2@example.com", "first_name": "User", "last_name": "Two"},
+                            "status": "O"
+                        }
+                    ],
+                    "running_challenges": [],
+                    "closed_challenges": []
+                }
+            }
+        )
+    }
+)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def list_challenges(request):
+    try:
+        # Fetch challenges categorized by status
+        open_challenges = Challenge.objects.filter(status='O')
+        running_challenges = Challenge.objects.filter(status='R')
+        closed_challenges = Challenge.objects.filter(status='C')
+
+        # Serialize challenges along with created_by and opponent user details
+        open_challenges_data = [
+            {
+                **ChallengeSerializer(challenge).data,
+                'created_by': UserSerializer(challenge.created_by).data,
+                'opponent': UserSerializer(challenge.opponent).data if challenge.opponent else None
+            } for challenge in open_challenges
+        ]
+        
+        running_challenges_data = [
+            {
+                **ChallengeSerializer(challenge).data,
+                'created_by': UserSerializer(challenge.created_by).data,
+                'opponent': UserSerializer(challenge.opponent).data if challenge.opponent else None
+            } for challenge in running_challenges
+        ]
+        
+        closed_challenges_data = [
+            {
+                **ChallengeSerializer(challenge).data,
+                'created_by': UserSerializer(challenge.created_by).data,
+                'opponent': UserSerializer(challenge.opponent).data if challenge.opponent else None
+            } for challenge in closed_challenges
+        ]
+
+        return Response({
+            "error":False,
+            "detail":"Challenges Fetched Successfully",
+            "open_challenges": open_challenges_data,
+            "running_challenges": running_challenges_data,
+            "closed_challenges": closed_challenges_data,
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({"error":True,"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)

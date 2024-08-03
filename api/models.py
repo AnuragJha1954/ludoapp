@@ -95,13 +95,17 @@ class RoomResults(models.Model):
 
 
 class Challenge(models.Model):
-    challenge_id = models.AutoField(primary_key=True)
+    STATUS_CHOICES = [
+        ('O', 'Open'),
+        ('R', 'Running'),
+        ('C', 'Closed'),
+    ]
+
+    challenge_id = models.CharField(max_length=10, primary_key=True)
     room = models.ForeignKey(Room, on_delete=models.CASCADE)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='created_challenges')
-    number_of_users = models.IntegerField(default=1)  # Ensure this is between 1 and 3
-    user1 = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='challenge_user1', null=True, blank=True)
-    user2 = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='challenge_user2', null=True, blank=True)
-    user3 = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='challenge_user3', null=True, blank=True)
+    opponent = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='opponent_challenges', null=True, blank=True)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='O')
 
     def __str__(self):
         return f"Challenge {self.challenge_id} in Room {self.room.room_id} created by {self.created_by.username}"

@@ -5,7 +5,8 @@ from .views import (
     create_room,
     create_wallet,
     create_room_result,
-    join_challenge
+    join_challenge,
+    list_challenges
 )
 
 urlpatterns = [
@@ -15,5 +16,6 @@ urlpatterns = [
     path('create-wallet/<int:user_id>/', create_wallet, name='create-wallet'),
     path('create-room-result/<int:user_id>/<int:room_id>/', create_room_result, name='create-room-result'),
     path('join-challenge/<int:user_id>/<int:challenge_id>/', join_challenge, name='join_challenge'),
+     path('get-challenges/', list_challenges, name='list_challenges'),
 
 ]
