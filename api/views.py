@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from users.models import CustomUser
 from .models import Room, Wallet, WithdrawalHistory, DepositHistory, RoomResults,Challenge
 from .serializers import RoomCreationSerializer, WalletCreationSerializer, DepositHistorySerializer, WithdrawalHistorySerializer, RoomResultsSerializer, ChallengeSerializer, UserSerializer
 from django.contrib.auth import get_user_model
@@ -65,9 +66,8 @@ logger = logging.getLogger(__name__)
 @permission_classes([AllowAny])
 def create_room(request, user_id):
     try:
-        user = request.user  # Assumes the user is authenticated and available in request
-        if not user or user.id != user_id:
-            return Response({"error": "User not authenticated or ID mismatch."}, status=status.HTTP_403_FORBIDDEN)
+        # Retrieve the user from the CustomUserModel
+        user = get_object_or_404(CustomUser, id=user_id)
 
         # Create a serializer instance with the request data and user context
         serializer = RoomCreationSerializer(data=request.data, context={'user': user})
@@ -444,29 +444,44 @@ def create_withdrawal(request, wallet_id):
 )
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def create_room_result(request, user_id, room_id):
+def create_room_result(request, user_id, room_id, challenge_id):
     try:
+        # Fetch Room instance
         room = Room.objects.get(id=room_id)
     except Room.DoesNotExist:
         return Response({"error": "Room with the given ID not found."}, status=status.HTTP_404_NOT_FOUND)
 
     try:
+        # Fetch User instance
         user = get_user_model().objects.get(id=user_id)
     except get_user_model().DoesNotExist:
         return Response({"error": "User with the given ID not found."}, status=status.HTTP_404_NOT_FOUND)
 
-    serializer = RoomResultsSerializer(data=request.data, context={'room': room, 'user': user})
+    try:
+        # Fetch Challenge instance
+        challenge = Challenge.objects.get(challenge_id=challenge_id)
+    except Challenge.DoesNotExist:
+        return Response({"error": "Challenge with the given ID not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # Create serializer instance with context
+    serializer = RoomResultsSerializer(data=request.data, context={'room': room, 'user': user, 'challenge': challenge})
 
     if serializer.is_valid():
+        # Save RoomResults instance
         room_result = serializer.save()
+
+        # Update challenge status to 'Completed'
+        challenge.status = 'C'  # Assuming 'C' for Completed status
+        challenge.save()
+
         return Response({
             "room_id": room_result.room.id,
             "user_id": room_result.user.id,
             "proof_screenshot": room_result.proof_screenshot.url if room_result.proof_screenshot else None,
             "status": room_result.status
         }, status=status.HTTP_201_CREATED)
+    
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 
@@ -524,6 +539,7 @@ def create_room_result(request, user_id, room_id):
     }
 )
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def join_challenge(request, user_id, challenge_id):
     try:
         user = request.user  # Assumes the user is authenticated and available in request

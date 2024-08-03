@@ -6,11 +6,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class RoomCreationSerializer(serializers.ModelSerializer):
-    number_of_users = serializers.IntegerField()  # Added to accept number of users
     
     class Meta:
         model = Room
-        fields = ['room_id', 'room_amount', 'number_of_users']
+        fields = ['room_id', 'room_amount']
     
     def create(self, validated_data):
         # Room creation will be handled in the view method
@@ -71,6 +70,8 @@ class RoomResultsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         room = self.context['room']
         user = self.context['user']
+        # Challenge is retrieved but not used directly in the creation
+        challenge = self.context.get('challenge')
         return RoomResults.objects.create(room=room, user=user, **validated_data)
     
     

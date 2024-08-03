@@ -84,6 +84,7 @@ class RoomResults(models.Model):
     room = models.ForeignKey('Room', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     proof_screenshot = models.ImageField(upload_to='winnings/', null=True, blank=True)
+    challenge = models.ForeignKey('Challenge', on_delete=models.CASCADE)  # Added ForeignKey to Challenge
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
 
     def __str__(self):
