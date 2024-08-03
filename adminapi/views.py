@@ -3,9 +3,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from .serializers import DepositHistorySerializer, UpdateDepositStatusSerializer, WithdrawalHistorySerializer, UpdateWithdrawalStatusSerializer,RoomResultsSerializer,UpdateRoomResultsStatusSerializer
-from api.models import DepositHistory,Wallet, WithdrawalHistory, RoomResults
+from api.models import DepositHistory,Wallet, WithdrawalHistory, RoomResults, Challenge
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.utils import timezone
+from django.db.models import Sum, Count
 
 @swagger_auto_schema(
     method='get',
@@ -344,6 +346,234 @@ def update_room_results_status(request, room_id):
 
 
 
+@swagger_auto_schema(
+    method='get',
+    operation_summary="Get Deposit Summary",
+    operation_description="Retrieve the total amount of successful deposits and the amount of successful deposits for the current day.",
+    responses={
+        200: openapi.Response(
+            description="Successful response",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'total_deposits_successful': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description="Total amount of successful deposits"
+                    ),
+                    'today_deposits_successful': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description="Total amount of successful deposits for the current day"
+                    ),
+                }
+            ),
+        ),
+        500: openapi.Response(
+            description="Error response",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'error': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description="Error message"
+                    ),
+                    'detail': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description="Detailed error description"
+                    ),
+                }
+            ),
+        ),
+    }
+)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_deposit_summary(request):
+    try:
+        # Get the current date and time
+        now = timezone.now()
+        start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
 
+        # Sum up all deposits with status 'S' (Successful)
+        total_deposits_successful = DepositHistory.objects.filter(status='S').aggregate(total=Sum('deposit_amount'))['total'] or 0
+
+        # Sum up deposits for the current day with status 'S' (Successful)
+        today_deposits_successful = DepositHistory.objects.filter(
+            status='S',
+            deposit_date__gte=start_of_today
+        ).aggregate(total=Sum('deposit_amount'))['total'] or 0
+
+        # Construct the response data
+        response_data = {
+            "total_deposits_successful": str(total_deposits_successful),
+            "today_deposits_successful": str(today_deposits_successful),
+        }
+
+        return Response(response_data, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({"error": str(e), "detail": "An error occurred while retrieving deposit summary."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@swagger_auto_schema(
+    method='get',
+    operation_summary="List Number of Games Status-Wise",
+    operation_description="Retrieve the number of challenges grouped by their status.",
+    responses={
+        200: openapi.Response(
+            description="Successful response",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'error': openapi.Schema(
+                        type=openapi.TYPE_BOOLEAN,
+                        description="Error status"
+                    ),
+                    'detail': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description="Detailed success message"
+                    ),
+                    'status_counts': openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        additional_properties=openapi.Schema(
+                            type=openapi.TYPE_INTEGER,
+                            description="Count of challenges for each status"
+                        ),
+                        description="Counts of challenges grouped by status"
+                    ),
+                }
+            ),
+        ),
+        500: openapi.Response(
+            description="Error response",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'error': openapi.Schema(
+                        type=openapi.TYPE_BOOLEAN,
+                        description="Error status"
+                    ),
+                    'detail': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description="Detailed error message"
+                    ),
+                }
+            ),
+        ),
+    }
+)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def list_challenges_status(request):
+    try:
+        # Aggregate the number of challenges by status
+        status_counts = Challenge.objects.values('status').annotate(count=Count('status'))
+
+        # Prepare the response data
+        response_data = {status: count for status, count in status_counts}
+
+        return Response({
+            "error": False,
+            "detail": "Challenge counts retrieved successfully",
+            "status_counts": response_data
+        }, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response({
+            "error": True,
+            "detail": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+
+
+
+
+
+@swagger_auto_schema(
+    method='get',
+    operation_summary="Total Amount of Withdrawals Status-Wise",
+    operation_description="Retrieve the total amount of withdrawals grouped by their status.",
+    responses={
+        200: openapi.Response(
+            description="Successful response",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'error': openapi.Schema(
+                        type=openapi.TYPE_BOOLEAN,
+                        description="Error status"
+                    ),
+                    'detail': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description="Detailed success message"
+                    ),
+                    'status_totals': openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        additional_properties=openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description="Total amount of withdrawals for each status"
+                        ),
+                        description="Total amounts of withdrawals grouped by status"
+                    ),
+                }
+            ),
+        ),
+        500: openapi.Response(
+            description="Error response",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'error': openapi.Schema(
+                        type=openapi.TYPE_BOOLEAN,
+                        description="Error status"
+                    ),
+                    'detail': openapi.Schema(
+                        type=openapi.TYPE_STRING,
+                        description="Detailed error message"
+                    ),
+                }
+            ),
+        ),
+    }
+)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def total_withdrawals_status(request):
+    try:
+        # Aggregate the total withdrawal amount by status
+        status_totals = WithdrawalHistory.objects.values('status').annotate(total_amount=Sum('withdrawal_amount'))
+
+        # Prepare the response data
+        response_data = {status: str(total_amount) for status, total_amount in status_totals}
+
+        return Response({
+            "error": False,
+            "detail": "Total withdrawal amounts retrieved successfully",
+            "status_totals": response_data
+        }, status=status.HTTP_200_OK)
+    
+    except Exception as e:
+        return Response({
+            "error": True,
+            "detail": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
