@@ -15,6 +15,9 @@ from django.http import JsonResponse
 from .models import OTPDetails
 from .serializers import OTPRequestSerializer
 from api.models import Wallet
+from django.contrib.auth import get_user_model
+from .models import OTPDetails
+from .serializers import OTPRequestSerializer
 import logging
 
 # Set up logging
@@ -163,47 +166,48 @@ def forgot_password(request, user_id):
 
 
 
-def generate_random_otp():
-    return str(random.randint(100000, 999999))
 
-
-
-def send_sms(data):
-    url = 'https://control.msg91.com/api/v5/otp?template_id=&mobile=&authkey=&realTimeResponse='
-    headers = {
-        'Content-Type': 'application/JSON',
-    }
-    response = requests.post(url, headers=headers, json=data)
-    return response
 
 
 
 
 @swagger_auto_schema(
     method='post',
+    operation_description="Generate and send OTP to the user's phone number",
     request_body=OTPRequestSerializer,
     responses={
         200: openapi.Response(
-            description="OTP sent successfully.",
+            description="OTP sent successfully",
             examples={
-                'application/json': {
-                    "message": "OTP sent successfully."
+                "application/json": {
+                    "error": False,
+                    "detail": "OTP sent successfully"
                 }
             }
         ),
         400: openapi.Response(
-            description="Invalid input.",
+            description="Bad request",
             examples={
-                'application/json': {
+                "application/json": {
                     "phone_number": ["This field is required."]
                 }
             }
         ),
-        500: openapi.Response(
-            description="Failed to send OTP.",
+        404: openapi.Response(
+            description="User not found",
             examples={
-                'application/json': {
-                    "error": "Failed to send OTP."
+                "application/json": {
+                    "error": True,
+                    "detail": "User not found"
+                }
+            }
+        ),
+        500: openapi.Response(
+            description="Failed to send OTP",
+            examples={
+                "application/json": {
+                    "error": True,
+                    "detail": "Failed to send OTP"
                 }
             }
         )
@@ -211,32 +215,48 @@ def send_sms(data):
 )
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def generate_otp(request):
+def generate_and_send_otp(request):
     serializer = OTPRequestSerializer(data=request.data)
     if serializer.is_valid():
         phone_number = serializer.validated_data['phone_number']
-        otp = generate_random_otp()
-
-        # Store OTP details
-        otp_details, created = OTPDetails.objects.update_or_create(
+        User = get_user_model()
+        
+        try:
+            user = User.objects.get(phone_number=phone_number)
+        except User.DoesNotExist:
+            return Response({"error": True, "detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Generate a random 4-digit OTP
+        otp_code = str(random.randint(1000, 9999))
+        
+        # Store or update the OTP in the database
+        otp, created = OTPDetails.objects.update_or_create(
             phone_number=phone_number,
-            defaults={'otp': otp}
+            defaults={'otp': otp_code},
         )
-
-        # Prepare data for SMS API
-        sms_data = {
-            "Param1": otp,  # OTP value
-            "Param2": phone_number,  # Phone number
-            "Param3": f"Your OTP is {otp}"  # Message body
+        
+        # Send OTP using the provided code
+        url = "https://www.fast2sms.com/dev/bulkV2"
+        payload = f"variables_values={otp_code}&route=otp&numbers={phone_number}"
+        headers = {
+            'authorization': "YOUR_API_KEY",  # Replace with your actual API key
+            'Content-Type': "application/x-www-form-urlencoded",
+            'Cache-Control': "no-cache",
         }
-
-        sms_response = send_sms(sms_data)
-
-        if sms_response.status_code == 200:
-            return JsonResponse({"message": "OTP sent successfully."}, status=200)
+        
+        response = requests.request("POST", url, data=payload, headers=headers)
+        
+        if response.status_code == 200:
+            return Response({"error": False, "detail": "OTP sent successfully"}, status=status.HTTP_200_OK)
         else:
-            return JsonResponse({"error": "Failed to send OTP."}, status=500)
-    return JsonResponse(serializer.errors, status=400)
+            return Response({"error": True, "detail": "Failed to send OTP"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 
 
 
@@ -250,53 +270,150 @@ def generate_otp(request):
 
 @swagger_auto_schema(
     method='post',
+    operation_description="Verify OTP and return user details",
     request_body=openapi.Schema(
         type=openapi.TYPE_OBJECT,
         properties={
-            'phone_number': openapi.Schema(type=openapi.TYPE_STRING),
-            'otp': openapi.Schema(type=openapi.TYPE_STRING),
+            'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='Phone number of the user'),
+            'otp': openapi.Schema(type=openapi.TYPE_STRING, description='OTP sent to the user')
         },
         required=['phone_number', 'otp']
     ),
     responses={
         200: openapi.Response(
-            description="OTP verified successfully.",
+            description="OTP verified successfully",
             examples={
-                'application/json': {
-                    "message": "OTP verified successfully."
+                "application/json": {
+                    "error": False,
+                    "detail": "OTP verified successfully",
+                    "token": "token_value",
+                    "user_details": {
+                        "id": 1,
+                        "username": "user1",
+                        "phone_number": "1234567890",
+                        "name": "User One",
+                        "email": "user1@example.com",
+                        "slug": "userone",
+                        "verified": True,
+                        "wallet": {
+                            "wallet_id": 1,
+                            "balance": 100.0,
+                            "last_modified": "2024-08-05T00:00:00Z"
+                        },
+                        "metric": {
+                            "played": 0,
+                            "win": 0,
+                            "penalty": 0,
+                            "referals": 0,
+                            "referal_winnings": 0
+                        }
+                    }
                 }
             }
         ),
-        400: openapi.Response(
-            description="Invalid OTP or phone number.",
-            examples={
-                'application/json': {
-                    "error": "OTP does not match."
-                }
-            }
-        )
+        400: "Invalid OTP or missing data",
+        404: "User or OTP not found",
+        500: "Internal server error"
     }
 )
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def verify_otp(request):
-    phone_number = request.data.get('phone_number')
-    otp = request.data.get('otp')
-
-    if not phone_number or not otp:
-        return Response({"error": "Phone number and OTP are required."}, status=status.HTTP_400_BAD_REQUEST)
-
     try:
-        otp_details = OTPDetails.objects.get(phone_number=phone_number)
-    except OTPDetails.DoesNotExist:
-        return Response({"error": "Phone number not found."}, status=status.HTTP_400_BAD_REQUEST)
+        if request.method == "POST":
+            phone_number = request.data.get('phone_number')
+            otp_code = request.data.get('otp')
 
-    if otp_details.otp == otp:
-        try:
-            user = CustomUser.objects.get(phone_number=phone_number)
-            user.verified = True
-            user.save()
-            return Response({"message": "OTP verified successfully."}, status=status.HTTP_200_OK)
-        except CustomUser.DoesNotExist:
-            return Response({"error": "User not found for the given phone number."}, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return Response({"error": "OTP does not match."}, status=status.HTTP_400_BAD_REQUEST)
+            # Validate request data
+            if not phone_number or not otp_code:
+                return Response(
+                    {"error": True, "detail": "Phone number and OTP are required"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Check if the OTP exists for the given phone number and matches the provided OTP
+            try:
+                otp_entry = OTPDetails.objects.get(phone_number=phone_number)
+                if otp_entry.otp != otp_code:
+                    return Response(
+                        {"error": True, "detail": "Invalid OTP"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+            except OTPDetails.DoesNotExist:
+                return Response(
+                    {"error": True, "detail": "OTP not found for the provided phone number"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            # Check if the user exists
+            User = get_user_model()
+            try:
+                user = User.objects.get(phone_number=phone_number)
+            except User.DoesNotExist:
+                return Response(
+                    {"error": True, "detail": "User not found"},
+                    status=status.HTTP_404_NOT_FOUND,
+                )
+
+            # Generate or get token
+            token, _ = Token.objects.get_or_create(user=user)
+
+            # Generate slug from first name and last name
+            slug = (user.first_name + user.last_name).lower().replace(" ", "")
+
+            # Get wallet details
+            try:
+                wallet = Wallet.objects.get(user=user)
+                wallet_details = {
+                    "wallet_id": wallet.id,
+                    "balance": wallet.balance,
+                    "last_modified": wallet.last_modified,
+                }
+            except Wallet.DoesNotExist:
+                wallet_details = {
+                    "wallet_id": None,
+                    "balance": 0,
+                    "last_modified": None,
+                }
+
+            # Metric details
+            metric = {
+                "played": 0,
+                "win": 0,
+                "penalty": 0,
+                "referals": 0,
+                "referal_winnings": 0,
+            }
+
+            # Get additional user details
+            user_details = {
+                "id": user.id,
+                "username": user.username,
+                "phone_number": user.phone_number,
+                "name": user.first_name + " " + user.last_name,
+                "email": user.email,
+                "slug": slug,
+                "verified": user.verified,
+                "wallet": wallet_details,
+                "metric": metric,
+            }
+
+            return Response(
+                {
+                    "error": False,
+                    "detail": "OTP verified successfully",
+                    "token": token.key,
+                    "user_details": user_details,
+                },
+                status=status.HTTP_200_OK,
+            )
+
+        return Response(
+            {"error": True, "detail": "Invalid request method"},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )
+    except Exception as e:
+        return Response(
+            {"error": True, "detail": str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )

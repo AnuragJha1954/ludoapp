@@ -91,3 +91,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
+        
+        
+        
+
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ['room_id', 'user', 'room_amount']  # Add other fields as needed
+        depth = 1  # This will automatically serialize the related user model details

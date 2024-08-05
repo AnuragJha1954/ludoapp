@@ -7,7 +7,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from users.models import CustomUser
 from .models import Room, Wallet, WithdrawalHistory, DepositHistory, RoomResults,Challenge
-from .serializers import RoomCreationSerializer, WalletCreationSerializer, DepositHistorySerializer, WithdrawalHistorySerializer, RoomResultsSerializer, ChallengeSerializer, UserSerializer
+from .serializers import RoomCreationSerializer, WalletCreationSerializer, DepositHistorySerializer, WithdrawalHistorySerializer, RoomResultsSerializer, ChallengeSerializer, UserSerializer, RoomSerializer
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from decimal import Decimal, InvalidOperation
@@ -174,9 +174,8 @@ def create_room(request, user_id):
 @permission_classes([AllowAny])
 def create_wallet(request, user_id):
     try:
-        user = request.user  # Assumes the user is authenticated and available in request
-        if not user or user.id != user_id:
-            return Response({"error": "User not authenticated or ID mismatch."}, status=status.HTTP_403_FORBIDDEN)
+        # Retrieve the user from the CustomUserModel
+        user = get_object_or_404(CustomUser, id=user_id)
         
         # Set balance to 0 by default
         data = {'balance': 0}
@@ -542,10 +541,9 @@ def create_room_result(request, user_id, room_id, challenge_id):
 @permission_classes([AllowAny])
 def join_challenge(request, user_id, challenge_id):
     try:
-        user = request.user  # Assumes the user is authenticated and available in request
-        if not user or user.id != user_id:
-            return Response({"error": "User not authenticated or ID mismatch."}, status=status.HTTP_403_FORBIDDEN)
-
+        # Retrieve the user from the CustomUserModel
+        user = get_object_or_404(CustomUser, id=user_id)
+        
         # Retrieve the challenge
         challenge = get_object_or_404(Challenge, challenge_id=challenge_id)
         room = challenge.room  # Access the room related to the challenge
@@ -637,38 +635,65 @@ def list_challenges(request):
         running_challenges = Challenge.objects.filter(status='R')
         closed_challenges = Challenge.objects.filter(status='C')
 
-        # Serialize challenges along with created_by and opponent user details
+        # Serialize challenges along with created_by, opponent user details, and room details
         open_challenges_data = [
             {
                 **ChallengeSerializer(challenge).data,
-                'created_by': UserSerializer(challenge.created_by).data,
-                'opponent': UserSerializer(challenge.opponent).data if challenge.opponent else None
+                'created_by': {
+                    'id': challenge.created_by.id,
+                    'username': challenge.created_by.username,
+                    'email': challenge.created_by.email,
+                },
+                'opponent': {
+                    'id': challenge.opponent.id,
+                    'username': challenge.opponent.username,
+                    'email': challenge.opponent.email,
+                } if challenge.opponent else None,
+                'room': RoomSerializer(challenge.room).data
             } for challenge in open_challenges
         ]
         
         running_challenges_data = [
             {
                 **ChallengeSerializer(challenge).data,
-                'created_by': UserSerializer(challenge.created_by).data,
-                'opponent': UserSerializer(challenge.opponent).data if challenge.opponent else None
+                'created_by': {
+                    'id': challenge.created_by.id,
+                    'username': challenge.created_by.username,
+                    'email': challenge.created_by.email,
+                },
+                'opponent': {
+                    'id': challenge.opponent.id,
+                    'username': challenge.opponent.username,
+                    'email': challenge.opponent.email,
+                } if challenge.opponent else None,
+                'room': RoomSerializer(challenge.room).data
             } for challenge in running_challenges
         ]
         
         closed_challenges_data = [
             {
                 **ChallengeSerializer(challenge).data,
-                'created_by': UserSerializer(challenge.created_by).data,
-                'opponent': UserSerializer(challenge.opponent).data if challenge.opponent else None
+                'created_by': {
+                    'id': challenge.created_by.id,
+                    'username': challenge.created_by.username,
+                    'email': challenge.created_by.email,
+                },
+                'opponent': {
+                    'id': challenge.opponent.id,
+                    'username': challenge.opponent.username,
+                    'email': challenge.opponent.email,
+                } if challenge.opponent else None,
+                'room': RoomSerializer(challenge.room).data
             } for challenge in closed_challenges
         ]
 
         return Response({
-            "error":False,
-            "detail":"Challenges Fetched Successfully",
+            "error": False,
+            "detail": "Challenges Fetched Successfully",
             "open_challenges": open_challenges_data,
             "running_challenges": running_challenges_data,
             "closed_challenges": closed_challenges_data,
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
-        return Response({"error":True,"detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": True, "detail": str(e)}, status=status.HTTP_400_BAD_REQUEST)

@@ -4,7 +4,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserCreationSerializer
+from .serializers import CustomUserCreateSerializer
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 import logging
@@ -17,24 +17,33 @@ logger = logging.getLogger(__name__)
 
 @swagger_auto_schema(
     method='post',
-    request_body=UserCreationSerializer,
+    operation_description="Create a new user",
+    request_body=CustomUserCreateSerializer,
     responses={
         201: openapi.Response(
-            description="User created successfully.",
+            description="User created successfully",
             examples={
-                'application/json': {
-                    "message": "User created successfully."
+                "application/json": {
+                    "error": False,
+                    "detail": "User created successfully",
+                    "user": {
+                        "id": 1,
+                        "username": "john_doe",
+                        "email": "john@example.com",
+                        "phone_number": "1234567890",
+                        "verified": False
+                    }
                 }
             }
         ),
         400: openapi.Response(
-            description="Invalid input data.",
+            description="Bad request",
             examples={
-                'application/json': {
-                    "username": ["This field is required."],
-                    "password": ["This field is required."],
-                    "email": ["This field is required."],
-                    # You can add more specific error examples based on the serializer validation
+                "application/json": {
+                    "error": True,
+                    "detail": {
+                        "username": ["This field is required."]
+                    }
                 }
             }
         )
@@ -43,8 +52,18 @@ logger = logging.getLogger(__name__)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def create_user(request):
-    serializer = UserCreationSerializer(data=request.data)
+    serializer = CustomUserCreateSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
-        return Response({"message": "User created successfully."}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = serializer.save()
+        return Response({
+            "error": False,
+            "detail": "User created successfully",
+            "user": {
+                "id": user.id,
+                "username": user.username,
+                "email": user.email,
+                "phone_number": user.phone_number,
+                "verified": user.verified
+            }
+        }, status=status.HTTP_201_CREATED)
+    return Response({"error": True, "detail": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
