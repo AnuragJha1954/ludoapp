@@ -239,17 +239,20 @@ def generate_and_send_otp(request):
         url = "https://www.fast2sms.com/dev/bulkV2"
         payload = f"variables_values={otp_code}&route=otp&numbers={phone_number}"
         headers = {
-            'authorization': "YOUR_API_KEY",  # Replace with your actual API key
+            'authorization': "RPjGU3qCngTObpvorWXIys98wKFf270aZE1YuB5ekVxmDchNJLL1nauD4hlSBHYeNkwcKgxEbfGQOyT0",  # Replace with your actual API key
             'Content-Type': "application/x-www-form-urlencoded",
             'Cache-Control': "no-cache",
         }
         
         response = requests.request("POST", url, data=payload, headers=headers)
         
-        if response.status_code == 200:
+        response_data = response.json()
+        
+        if response_data.get("return"):
             return Response({"error": False, "detail": "OTP sent successfully"}, status=status.HTTP_200_OK)
         else:
             return Response({"error": True, "detail": "Failed to send OTP"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
