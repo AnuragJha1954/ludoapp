@@ -371,6 +371,7 @@ def verify_otp(request):
                     "wallet_id": wallet.id,
                     "balance": wallet.balance,
                     "last_modified": wallet.last_modified,
+                    "withdrawable_balance": wallet.withdrawable_balance,
                 }
             except Wallet.DoesNotExist:
                 wallet_details = {
