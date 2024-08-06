@@ -3,7 +3,7 @@ from .models import Wallet, DepositHistory, WithdrawalHistory, Room,Challenge
 
 # Register your models here.
 class WalletAdmin(admin.ModelAdmin):
-    list_display = ['user', 'balance', 'last_modified']
+    list_display = ['user', 'balance', 'last_modified', 'withdrawable_balance']
 
 class DepositHistoryAdmin(admin.ModelAdmin):
     list_display = ['wallet', 'deposit_amount', 'deposit_date', 'status']

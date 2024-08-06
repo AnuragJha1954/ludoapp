@@ -350,7 +350,7 @@ def create_withdrawal(request, wallet_id):
         except (ValueError, InvalidOperation):
             return Response({"error": True, "detail": "Invalid withdrawal amount."}, status=status.HTTP_400_BAD_REQUEST)
         
-        if wallet.balance < withdrawal_amount:
+        if wallet.withdrawable_balance < withdrawal_amount:
             return Response({"error": True, "detail": "Insufficient balance."}, status=status.HTTP_400_BAD_REQUEST)
 
     serializer = WithdrawalHistorySerializer(data=request.data, context={'wallet': wallet})

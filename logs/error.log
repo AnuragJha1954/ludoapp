@@ -28,3 +28,4 @@ Traceback (most recent call last):
   File "C:\Users\admin\Desktop\Personal\Projects\ludoapp\api\views.py", line 351, in create_withdrawal
     wallet.balance -= withdrawal_amount
 TypeError: unsupported operand type(s) for -=: 'decimal.Decimal' and 'float'
+ERROR 2024-08-06 21:58:03,354 log Internal Server Error: /auth/generate-otp/

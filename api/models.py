@@ -9,10 +9,11 @@ from django.utils import timezone
 class Wallet(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2)
+    withdrawable_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     last_modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Wallet of {self.user.username} with balance {self.balance}"
+        return f"Wallet of {self.user.username} with balance {self.balance} and withdrawable balance {self.withdrawable_balance}"
     
     
     
@@ -23,15 +24,21 @@ class DepositHistory(models.Model):
         ('P', 'Pending'),
         ('S', 'Successful'),
     ]
+    
+    TAG_CHOICES = [
+        ('W', 'Winning'),
+        ('D', 'Deposit'),
+    ]
 
     wallet = models.ForeignKey('Wallet', on_delete=models.CASCADE)
     deposit_amount = models.DecimalField(max_digits=10, decimal_places=2)
     deposit_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
     proof_screenshot = models.ImageField(upload_to='deposits/', null=True, blank=True)
+    tag = models.CharField(max_length=1, choices=TAG_CHOICES, default='D')
 
     def __str__(self):
-        return f"Deposit of {self.deposit_amount} to {self.wallet.user.username} on {self.deposit_date}"    
+        return f"Deposit of {self.deposit_amount} to {self.wallet.user.username} on {self.deposit_date} as {self.tag}"    
     
 
 
