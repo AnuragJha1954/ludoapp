@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d0ace734-89bb-4509-af22-41b54ec5a5cc",
+		"_postman_id": "64795a8a-526e-4a3f-90de-3905afc9f96e",
 		"name": "LudoApp API",
 		"description": "API documentation for the LudoApp project\n\nContact Support:\n Email: anurag2001jha@gmail.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -2700,7 +2700,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"D\"\n  },\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"D\"\n  }\n]"
+									"body": "[\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"P\"\n  },\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"D\"\n  }\n]"
 								},
 								{
 									"name": "Invalid input",
@@ -2758,7 +2758,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
+											"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -2808,7 +2808,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2844,7 +2844,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}"
+											"body": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}"
 										},
 										{
 											"name": "Invalid input",
@@ -2863,7 +2863,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2913,7 +2913,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -3190,195 +3190,218 @@
 							"name": "{room_id}",
 							"item": [
 								{
-									"name": "panel approve-room-results update",
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
+									"name": "{admin_user_id}",
+									"item": [
+										{
+											"name": "panel approve-room-results update",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/approve-room-results/:room_id/:admin_user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"approve-room-results",
+														":room_id",
+														":admin_user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "room_id",
+															"value": "<string>",
+															"description": "(Required) "
+														},
+														{
+															"key": "admin_user_id",
+															"value": "<string>",
+															"description": "(Required) "
+														}
+													]
 												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/panel/approve-room-results/:room_id/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"panel",
-												"approve-room-results",
-												":room_id",
-												""
-											],
-											"variable": [
+											},
+											"response": [
 												{
-													"key": "room_id",
-													"value": "<string>",
-													"description": "(Required) "
+													"name": "Status updated to Successful and wallet balance updated",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-room-results/:room_id/:admin_user_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-room-results",
+																":room_id",
+																":admin_user_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "room_id"
+																},
+																{
+																	"key": "admin_user_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Bad request",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-room-results/:room_id/:admin_user_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-room-results",
+																":room_id",
+																":admin_user_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "room_id"
+																},
+																{
+																	"key": "admin_user_id"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Room result not found",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-room-results/:room_id/:admin_user_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-room-results",
+																":room_id",
+																":admin_user_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "room_id"
+																},
+																{
+																	"key": "admin_user_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
 												}
 											]
-										}
-									},
-									"response": [
-										{
-											"name": "Status updated to Successful and wallet balance updated",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Authorization",
-														"value": "Basic <credentials>",
-														"description": "Added as a part of security scheme: basic"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/panel/approve-room-results/:room_id/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"panel",
-														"approve-room-results",
-														":room_id",
-														""
-													],
-													"variable": [
-														{
-															"key": "room_id"
-														}
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Bad request",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Authorization",
-														"value": "Basic <credentials>",
-														"description": "Added as a part of security scheme: basic"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/panel/approve-room-results/:room_id/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"panel",
-														"approve-room-results",
-														":room_id",
-														""
-													],
-													"variable": [
-														{
-															"key": "room_id"
-														}
-													]
-												}
-											},
-											"status": "Bad Request",
-											"code": 400,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Room result not found",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Authorization",
-														"value": "Basic <credentials>",
-														"description": "Added as a part of security scheme: basic"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/panel/approve-room-results/:room_id/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"panel",
-														"approve-room-results",
-														":room_id",
-														""
-													],
-													"variable": [
-														{
-															"key": "room_id"
-														}
-													]
-												}
-											},
-											"status": "Not Found",
-											"code": 404,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
 										}
 									]
 								}
@@ -3667,6 +3690,530 @@
 					]
 				},
 				{
+					"name": "change-commission",
+					"item": [
+						{
+							"name": "{user_id}",
+							"item": [
+								{
+									"name": "panel change-commission update",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"commission_percentage\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/panel/change-commission/:user_id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"change-commission",
+												":user_id",
+												""
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Change the commission percentage for an admin"
+									},
+									"response": [
+										{
+											"name": "Commission percentage updated successfully",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"commission_percentage\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/change-commission/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"change-commission",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Invalid input or commission percentage",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"commission_percentage\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/change-commission/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"change-commission",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Admin details not found",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"commission_percentage\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/change-commission/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"change-commission",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Internal server error",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"commission_percentage\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/change-commission/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"change-commission",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "get-admin-details",
+					"item": [
+						{
+							"name": "{user_id}",
+							"item": [
+								{
+									"name": "panel get-admin-details read",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/panel/get-admin-details/:user_id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"get-admin-details",
+												":user_id",
+												""
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Get Admin details by user ID"
+									},
+									"response": [
+										{
+											"name": "Untitled Response",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/panel/get-admin-details/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"get-admin-details",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"user\": \"<integer>\",\n  \"commission_percentage\": \"<string>\",\n  \"upi_name\": \"<string>\",\n  \"upi_id\": \"<string>\",\n  \"upi_qr_url\": \"<string>\"\n}"
+										},
+										{
+											"name": "Admin details not found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/panel/get-admin-details/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"get-admin-details",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Internal server error",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/panel/get-admin-details/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"get-admin-details",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "get-commisions",
+					"item": [
+						{
+							"name": "panel get-commisions list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/panel/get-commisions/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"panel",
+										"get-commisions",
+										""
+									]
+								},
+								"description": "Get the overall and today's admin commission"
+							},
+							"response": [
+								{
+									"name": "Successful Response",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Basic <credentials>",
+												"description": "Added as a part of security scheme: basic"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/panel/get-commisions/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"get-commisions",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"overall_commission\": 1500.5,\n        \"today_commission\": 100.5\n      }\n    }\n  }\n}"
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Basic <credentials>",
+												"description": "Added as a part of security scheme: basic"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/panel/get-commisions/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"get-commisions",
+												""
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": \"Detailed error message\"\n      }\n    }\n  }\n}"
+								}
+							]
+						}
+					]
+				},
+				{
 					"name": "get-deposits",
 					"item": [
 						{
@@ -3828,7 +4375,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"S\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"S\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"S\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -3927,7 +4474,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"S\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"S\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -4027,7 +4574,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_counts\": {\n    \"consequatfe\": \"<integer>\"\n  }\n}"
+									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_counts\": {\n    \"incididunt_b86\": \"<integer>\",\n    \"sit0e\": \"<integer>\",\n    \"eiusmod43\": \"<integer>\"\n  }\n}"
 								},
 								{
 									"name": "Error response",
@@ -4245,7 +4792,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_totals\": {\n    \"Lorem_081\": \"<string>\",\n    \"ex7\": \"<string>\"\n  }\n}"
+									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_totals\": {\n    \"nulla05f\": \"<string>\",\n    \"veniam3\": \"<string>\",\n    \"amet1\": \"<string>\"\n  }\n}"
 								},
 								{
 									"name": "Error response",
@@ -4289,6 +4836,514 @@
 							]
 						}
 					]
+				},
+				{
+					"name": "update-upi",
+					"item": [
+						{
+							"name": "{user_id}",
+							"item": [
+								{
+									"name": "panel update-upi create",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"upi_name\": \"<string>\",\n  \"upi_id\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/panel/update-upi/:user_id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"update-upi",
+												":user_id",
+												""
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Update UPI details and generate QR code"
+									},
+									"response": [
+										{
+											"name": "UPI details updated and QR code generated successfully",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"upi_name\": \"<string>\",\n  \"upi_id\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/update-upi/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"update-upi",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Invalid input",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"upi_name\": \"<string>\",\n  \"upi_id\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/update-upi/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"update-upi",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Admin details not found",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"upi_name\": \"<string>\",\n  \"upi_id\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/update-upi/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"update-upi",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Internal server error",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"upi_name\": \"<string>\",\n  \"upi_id\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/update-upi/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"update-upi",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "update-whatsapp-number",
+					"item": [
+						{
+							"name": "{user_id}",
+							"item": [
+								{
+									"name": "panel update-whatsapp-number update",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"whatsapp_number\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/panel/update-whatsapp-number/:user_id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"update-whatsapp-number",
+												":user_id",
+												""
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Update the WhatsApp number for an admin"
+									},
+									"response": [
+										{
+											"name": "WhatsApp number updated successfully",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"whatsapp_number\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/update-whatsapp-number/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"update-whatsapp-number",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Invalid input or WhatsApp number",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"whatsapp_number\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/update-whatsapp-number/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"update-whatsapp-number",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Admin details not found",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"whatsapp_number\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/update-whatsapp-number/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"update-whatsapp-number",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										},
+										{
+											"name": "Internal server error",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"whatsapp_number\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/update-whatsapp-number/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"update-whatsapp-number",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "text",
+											"header": [],
+											"cookie": [],
+											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
 				}
 			]
 		},
@@ -4314,7 +5369,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"username\": \"AG1HO8Iphkk\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+									"raw": "{\n  \"username\": \"Nfsp3Ifsmu9\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -4357,7 +5412,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"AG1HO8Iphkk\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+											"raw": "{\n  \"username\": \"Nfsp3Ifsmu9\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -4410,7 +5465,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"AG1HO8Iphkk\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+											"raw": "{\n  \"username\": \"Nfsp3Ifsmu9\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
