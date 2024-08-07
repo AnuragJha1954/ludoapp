@@ -40,62 +40,61 @@ def user_login(request):
             serializer = CustomUserLoginSerializer(data=request.data)
             if serializer.is_valid():
                 user = serializer.validated_data["user"]
-                
-                # Check if the user is an admin
-                is_admin = AdminDetails.objects.filter(user=user).exists()
-
                 token, _ = Token.objects.get_or_create(user=user)
 
                 # Generate slug from first name and last name
                 slug = (user.first_name + user.last_name).lower().replace(" ", "")
 
+                # Check if the user is an admin
+                is_admin = AdminDetails.objects.filter(user=user).exists()
+                
                 # Get wallet details
-            try:
-                wallet = Wallet.objects.get(user=user)
-                wallet_details = {
-                    "wallet_id": wallet.id,
-                    "balance": wallet.balance,
-                    "last_modified": wallet.last_modified,
-                    "withdrawable_balance": wallet.withdrawable_balance,
-                }
-            except Wallet.DoesNotExist:
-                wallet_details = {
-                    "wallet_id": None,
-                    "balance": 0,
-                    "last_modified": None,
-                }
-
-            # Metric details
-            metric = {
-                "played": 0,
-                "win": 0,
-                "penalty": 0,
-                "referals": 0,
-                "referal_winnings": 0,
-            }
-
-            # Get additional user details
-            user_details = {
-                "id": user.id,
-                "username": user.username,
-                "phone_number": user.phone_number,
-                "name": user.first_name + " " + user.last_name,
-                "email": user.email,
-                "slug": slug,
-                "verified": user.verified,
-                "kyc":user.kyc,
-                "is_admin": is_admin,  # Include the is_admin field
-                "wallet": wallet_details,
-                "metric": metric,
-            }
-            
-            if is_admin:
                 try:
-                    admin_details = AdminDetails.objects.get(user=user)
-                    admin_serializer = AdminDetailsSerializer(admin_details, context={'request': request})
-                    user_details.update({"admin_details": admin_serializer.data})
-                except AdminDetails.DoesNotExist:
-                    pass  # No admin details to add if it doesn't exist
+                    wallet = Wallet.objects.get(user=user)
+                    wallet_details = {
+                        "wallet_id": wallet.id,
+                        "balance": wallet.balance,
+                        "last_modified": wallet.last_modified,
+                        "withdrawable_balance":wallet.withdrawable_balance
+                    }
+                except Wallet.DoesNotExist:
+                    wallet_details = {
+                        "wallet_id": None,
+                        "balance": 0,
+                        "last_modified": None,
+                    }
+
+                # Metric details
+                metric = {
+                    "played": 0,
+                    "win":0,
+                    "penalty":0,
+                    "referals":0,
+                    "referal_winnings":0,
+                }
+                
+                # Get additional user details
+                user_details = {
+                    "id": user.id,
+                    "username": user.username,
+                    "phone_number": user.phone_number,
+                    "name": user.first_name + " " + user.last_name,
+                    "email": user.email,
+                    "slug": slug,
+                    "verified":user.verified,
+                    "kyc":user.kyc,
+                    "is_admin": is_admin,  # Include the is_admin field
+                    "wallet": wallet_details,
+                    "metric": metric,
+                }
+                
+                if is_admin:
+                    try:
+                        admin_details = AdminDetails.objects.get(user=user)
+                        admin_serializer = AdminDetailsSerializer(admin_details, context={'request': request})
+                        user_details.update({"admin_details": admin_serializer.data})
+                    except AdminDetails.DoesNotExist:
+                        pass  # No admin details to add if it doesn't exist
                 
                 return Response(
                     {
