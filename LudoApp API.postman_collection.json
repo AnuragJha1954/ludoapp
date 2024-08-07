@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f35d335c-8dce-4f2c-bff2-73fae712ba92",
+		"_postman_id": "d0ace734-89bb-4509-af22-41b54ec5a5cc",
 		"name": "LudoApp API",
 		"description": "API documentation for the LudoApp project\n\nContact Support:\n Email: anurag2001jha@gmail.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -2297,27 +2297,468 @@
 			]
 		},
 		{
-			"name": "panel",
+			"name": "kyc",
 			"item": [
 				{
-					"name": "approve-deposits",
+					"name": "approve",
 					"item": [
 						{
-							"name": "{wallet_id}",
+							"name": "{user_id}",
 							"item": [
 								{
-									"name": "panel approve-deposits update",
+									"name": "{kyc_id}",
+									"item": [
+										{
+											"name": "kyc approve create",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/kyc/approve/:user_id/:kyc_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"kyc",
+														"approve",
+														":user_id",
+														":kyc_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id",
+															"value": "<string>",
+															"description": "(Required) "
+														},
+														{
+															"key": "kyc_id",
+															"value": "<string>",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "KYC details approved successfully",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/kyc/approve/:user_id/:kyc_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"kyc",
+																"approve",
+																":user_id",
+																":kyc_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "user_id"
+																},
+																{
+																	"key": "kyc_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Invalid input",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/kyc/approve/:user_id/:kyc_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"kyc",
+																"approve",
+																":user_id",
+																":kyc_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "user_id"
+																},
+																{
+																	"key": "kyc_id"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "User or KYC details not found",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/kyc/approve/:user_id/:kyc_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"kyc",
+																"approve",
+																":user_id",
+																":kyc_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "user_id"
+																},
+																{
+																	"key": "kyc_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "decline",
+					"item": [
+						{
+							"name": "{user_id}",
+							"item": [
+								{
+									"name": "{kyc_id}",
+									"item": [
+										{
+											"name": "kyc decline create",
+											"request": {
+												"method": "POST",
+												"header": [],
+												"url": {
+													"raw": "{{baseUrl}}/kyc/decline/:user_id/:kyc_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"kyc",
+														"decline",
+														":user_id",
+														":kyc_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id",
+															"value": "<string>",
+															"description": "(Required) "
+														},
+														{
+															"key": "kyc_id",
+															"value": "<string>",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "KYC details declined successfully",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/kyc/decline/:user_id/:kyc_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"kyc",
+																"decline",
+																":user_id",
+																":kyc_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "user_id"
+																},
+																{
+																	"key": "kyc_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Invalid input",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/kyc/decline/:user_id/:kyc_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"kyc",
+																"decline",
+																":user_id",
+																":kyc_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "user_id"
+																},
+																{
+																	"key": "kyc_id"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "User or KYC details not found",
+													"originalRequest": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/kyc/decline/:user_id/:kyc_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"kyc",
+																"decline",
+																":user_id",
+																":kyc_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "user_id"
+																},
+																{
+																	"key": "kyc_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "get-kyc",
+					"item": [
+						{
+							"name": "kyc get-kyc list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/kyc/get-kyc/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"kyc",
+										"get-kyc",
+										""
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successfully fetched KYC details",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Basic <credentials>",
+												"description": "Added as a part of security scheme: basic"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/kyc/get-kyc/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"kyc",
+												"get-kyc",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"D\"\n  },\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"D\"\n  }\n]"
+								},
+								{
+									"name": "Invalid input",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Basic <credentials>",
+												"description": "Added as a part of security scheme: basic"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/kyc/get-kyc/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"kyc",
+												"get-kyc",
+												""
+											]
+										}
+									},
+									"status": "Bad Request",
+									"code": 400,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "upload",
+					"item": [
+						{
+							"name": "{user_id}",
+							"item": [
+								{
+									"name": "kyc upload create",
 									"request": {
-										"method": "PUT",
+										"method": "POST",
 										"header": [
 											{
 												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
 												"value": "application/json"
 											}
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"deposit_date\": \"<dateTime>\"\n}",
+											"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -2326,19 +2767,19 @@
 											}
 										},
 										"url": {
-											"raw": "{{baseUrl}}/panel/approve-deposits/:wallet_id/",
+											"raw": "{{baseUrl}}/kyc/upload/:user_id/",
 											"host": [
 												"{{baseUrl}}"
 											],
 											"path": [
-												"panel",
-												"approve-deposits",
-												":wallet_id",
+												"kyc",
+												"upload",
+												":user_id",
 												""
 											],
 											"variable": [
 												{
-													"key": "wallet_id",
+													"key": "user_id",
 													"value": "<string>",
 													"description": "(Required) "
 												}
@@ -2347,12 +2788,16 @@
 									},
 									"response": [
 										{
-											"name": "Status updated to Successful and wallet balance updated",
+											"name": "KYC details submitted successfully",
 											"originalRequest": {
-												"method": "PUT",
+												"method": "POST",
 												"header": [
 													{
 														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
 														"value": "application/json"
 													},
 													{
@@ -2363,7 +2808,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"deposit_date\": \"<dateTime>\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2372,34 +2817,39 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/panel/approve-deposits/:wallet_id/",
+													"raw": "{{baseUrl}}/kyc/upload/:user_id/",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
-														"panel",
-														"approve-deposits",
-														":wallet_id",
+														"kyc",
+														"upload",
+														":user_id",
 														""
 													],
 													"variable": [
 														{
-															"key": "wallet_id"
+															"key": "user_id"
 														}
 													]
 												}
 											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "text",
-											"header": [],
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
 											"cookie": [],
-											"body": ""
+											"body": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}"
 										},
 										{
-											"name": "Bad request",
+											"name": "Invalid input",
 											"originalRequest": {
-												"method": "PUT",
+												"method": "POST",
 												"header": [
 													{
 														"key": "Content-Type",
@@ -2413,7 +2863,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"deposit_date\": \"<dateTime>\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2422,19 +2872,19 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/panel/approve-deposits/:wallet_id/",
+													"raw": "{{baseUrl}}/kyc/upload/:user_id/",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
-														"panel",
-														"approve-deposits",
-														":wallet_id",
+														"kyc",
+														"upload",
+														":user_id",
 														""
 													],
 													"variable": [
 														{
-															"key": "wallet_id"
+															"key": "user_id"
 														}
 													]
 												}
@@ -2447,9 +2897,9 @@
 											"body": ""
 										},
 										{
-											"name": "Deposit not found",
+											"name": "User not found",
 											"originalRequest": {
-												"method": "PUT",
+												"method": "POST",
 												"header": [
 													{
 														"key": "Content-Type",
@@ -2463,7 +2913,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"deposit_date\": \"<dateTime>\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2472,19 +2922,19 @@
 													}
 												},
 												"url": {
-													"raw": "{{baseUrl}}/panel/approve-deposits/:wallet_id/",
+													"raw": "{{baseUrl}}/kyc/upload/:user_id/",
 													"host": [
 														"{{baseUrl}}"
 													],
 													"path": [
-														"panel",
-														"approve-deposits",
-														":wallet_id",
+														"kyc",
+														"upload",
+														":user_id",
 														""
 													],
 													"variable": [
 														{
-															"key": "wallet_id"
+															"key": "user_id"
 														}
 													]
 												}
@@ -2495,6 +2945,237 @@
 											"header": [],
 											"cookie": [],
 											"body": ""
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "panel",
+			"item": [
+				{
+					"name": "approve-deposits",
+					"item": [
+						{
+							"name": "{wallet_id}",
+							"item": [
+								{
+									"name": "{deposit_id}",
+									"item": [
+										{
+											"name": "panel approve-deposits update",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"deposit_date\": \"<dateTime>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/approve-deposits/:wallet_id/:deposit_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"approve-deposits",
+														":wallet_id",
+														":deposit_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "wallet_id",
+															"value": "<string>",
+															"description": "(Required) "
+														},
+														{
+															"key": "deposit_id",
+															"value": "<string>",
+															"description": "(Required) "
+														}
+													]
+												}
+											},
+											"response": [
+												{
+													"name": "Status updated to Successful and wallet balance updated",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"deposit_date\": \"<dateTime>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-deposits/:wallet_id/:deposit_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-deposits",
+																":wallet_id",
+																":deposit_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "wallet_id"
+																},
+																{
+																	"key": "deposit_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Bad request",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"deposit_date\": \"<dateTime>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-deposits/:wallet_id/:deposit_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-deposits",
+																":wallet_id",
+																":deposit_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "wallet_id"
+																},
+																{
+																	"key": "deposit_id"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Deposit not found",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"deposit_date\": \"<dateTime>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-deposits/:wallet_id/:deposit_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-deposits",
+																":wallet_id",
+																":deposit_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "wallet_id"
+																},
+																{
+																	"key": "deposit_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												}
+											]
 										}
 									]
 								}
@@ -2712,245 +3393,272 @@
 							"name": "{wallet_id}",
 							"item": [
 								{
-									"name": "panel approve-withdrawal update",
-									"request": {
-										"method": "PUT",
-										"header": [
-											{
-												"key": "Content-Type",
-												"value": "application/json"
-											}
-										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
-											"options": {
-												"raw": {
-													"headerFamily": "json",
-													"language": "json"
+									"name": "{withdrawal_id}",
+									"item": [
+										{
+											"name": "panel approve-withdrawal update",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/:withdrawal_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"approve-withdrawal",
+														":wallet_id",
+														":withdrawal_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "wallet_id",
+															"value": "<string>",
+															"description": "(Required) "
+														},
+														{
+															"key": "withdrawal_id",
+															"value": "<string>",
+															"description": "(Required) "
+														}
+													]
 												}
-											}
-										},
-										"url": {
-											"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/",
-											"host": [
-												"{{baseUrl}}"
-											],
-											"path": [
-												"panel",
-												"approve-withdrawal",
-												":wallet_id",
-												""
-											],
-											"variable": [
+											},
+											"response": [
 												{
-													"key": "wallet_id",
-													"value": "<string>",
-													"description": "(Required) "
+													"name": "Status updated to Successful and wallet balance updated",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/:withdrawal_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-withdrawal",
+																":wallet_id",
+																":withdrawal_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "wallet_id"
+																},
+																{
+																	"key": "withdrawal_id"
+																}
+															]
+														}
+													},
+													"status": "OK",
+													"code": 200,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Bad request",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/:withdrawal_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-withdrawal",
+																":wallet_id",
+																":withdrawal_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "wallet_id"
+																},
+																{
+																	"key": "withdrawal_id"
+																}
+															]
+														}
+													},
+													"status": "Bad Request",
+													"code": 400,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Withdrawal not found",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/:withdrawal_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-withdrawal",
+																":wallet_id",
+																":withdrawal_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "wallet_id"
+																},
+																{
+																	"key": "withdrawal_id"
+																}
+															]
+														}
+													},
+													"status": "Not Found",
+													"code": 404,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
+												},
+												{
+													"name": "Insufficient balance",
+													"originalRequest": {
+														"method": "PUT",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Authorization",
+																"value": "Basic <credentials>",
+																"description": "Added as a part of security scheme: basic"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
+															"options": {
+																"raw": {
+																	"headerFamily": "json",
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/:withdrawal_id/",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"panel",
+																"approve-withdrawal",
+																":wallet_id",
+																":withdrawal_id",
+																""
+															],
+															"variable": [
+																{
+																	"key": "wallet_id"
+																},
+																{
+																	"key": "withdrawal_id"
+																}
+															]
+														}
+													},
+													"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+													"code": 422,
+													"_postman_previewlanguage": "text",
+													"header": [],
+													"cookie": [],
+													"body": ""
 												}
 											]
-										}
-									},
-									"response": [
-										{
-											"name": "Status updated to Successful and wallet balance updated",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Authorization",
-														"value": "Basic <credentials>",
-														"description": "Added as a part of security scheme: basic"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"panel",
-														"approve-withdrawal",
-														":wallet_id",
-														""
-													],
-													"variable": [
-														{
-															"key": "wallet_id"
-														}
-													]
-												}
-											},
-											"status": "OK",
-											"code": 200,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Bad request",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Authorization",
-														"value": "Basic <credentials>",
-														"description": "Added as a part of security scheme: basic"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"panel",
-														"approve-withdrawal",
-														":wallet_id",
-														""
-													],
-													"variable": [
-														{
-															"key": "wallet_id"
-														}
-													]
-												}
-											},
-											"status": "Bad Request",
-											"code": 400,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Withdrawal not found",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Authorization",
-														"value": "Basic <credentials>",
-														"description": "Added as a part of security scheme: basic"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"panel",
-														"approve-withdrawal",
-														":wallet_id",
-														""
-													],
-													"variable": [
-														{
-															"key": "wallet_id"
-														}
-													]
-												}
-											},
-											"status": "Not Found",
-											"code": 404,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
-										},
-										{
-											"name": "Insufficient balance",
-											"originalRequest": {
-												"method": "PUT",
-												"header": [
-													{
-														"key": "Content-Type",
-														"value": "application/json"
-													},
-													{
-														"key": "Authorization",
-														"value": "Basic <credentials>",
-														"description": "Added as a part of security scheme: basic"
-													}
-												],
-												"body": {
-													"mode": "raw",
-													"raw": "{\n  \"withdrawal_date\": \"<dateTime>\"\n}",
-													"options": {
-														"raw": {
-															"headerFamily": "json",
-															"language": "json"
-														}
-													}
-												},
-												"url": {
-													"raw": "{{baseUrl}}/panel/approve-withdrawal/:wallet_id/",
-													"host": [
-														"{{baseUrl}}"
-													],
-													"path": [
-														"panel",
-														"approve-withdrawal",
-														":wallet_id",
-														""
-													],
-													"variable": [
-														{
-															"key": "wallet_id"
-														}
-													]
-												}
-											},
-											"status": "Unprocessable Entity (WebDAV) (RFC 4918)",
-											"code": 422,
-											"_postman_previewlanguage": "text",
-											"header": [],
-											"cookie": [],
-											"body": ""
 										}
 									]
 								}
@@ -2985,7 +3693,7 @@
 							},
 							"response": [
 								{
-									"name": "List of pending deposit history entries",
+									"name": "List of all deposit history entries",
 									"originalRequest": {
 										"method": "GET",
 										"header": [
@@ -3021,7 +3729,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"deposit_amount\": \"<string>\",\n    \"deposit_date\": \"<dateTime>\",\n    \"status\": \"P\",\n    \"proof_screenshot\": \"<uri>\",\n    \"proof_screenshot_url\": \"<uri>\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"deposit_amount\": \"<string>\",\n    \"deposit_date\": \"<dateTime>\",\n    \"status\": \"P\",\n    \"proof_screenshot\": \"<uri>\",\n    \"proof_screenshot_url\": \"<uri>\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"deposit_amount\": \"<string>\",\n    \"deposit_date\": \"<dateTime>\",\n    \"status\": \"S\",\n    \"proof_screenshot\": \"<uri>\",\n    \"proof_screenshot_url\": \"<uri>\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"deposit_amount\": \"<string>\",\n    \"deposit_date\": \"<dateTime>\",\n    \"status\": \"S\",\n    \"proof_screenshot\": \"<uri>\",\n    \"proof_screenshot_url\": \"<uri>\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -3084,7 +3792,7 @@
 							},
 							"response": [
 								{
-									"name": "List of pending room results",
+									"name": "List of all room results",
 									"originalRequest": {
 										"method": "GET",
 										"header": [
@@ -3120,7 +3828,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"S\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"S\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"S\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -3183,7 +3891,7 @@
 							},
 							"response": [
 								{
-									"name": "List of pending withdrawal history entries",
+									"name": "List of all withdrawal history entries",
 									"originalRequest": {
 										"method": "GET",
 										"header": [
@@ -3219,7 +3927,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"S\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -3319,7 +4027,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_counts\": {\n    \"incididunt35\": \"<integer>\"\n  }\n}"
+									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_counts\": {\n    \"consequatfe\": \"<integer>\"\n  }\n}"
 								},
 								{
 									"name": "Error response",
@@ -3537,7 +4245,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_totals\": {\n    \"quis_433\": \"<string>\"\n  }\n}"
+									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_totals\": {\n    \"Lorem_081\": \"<string>\",\n    \"ex7\": \"<string>\"\n  }\n}"
 								},
 								{
 									"name": "Error response",
@@ -3606,7 +4314,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"username\": \"fGbi.QtJ\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+									"raw": "{\n  \"username\": \"AG1HO8Iphkk\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -3649,7 +4357,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"fGbi.QtJ\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+											"raw": "{\n  \"username\": \"AG1HO8Iphkk\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -3702,7 +4410,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"fGbi.QtJ\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+											"raw": "{\n  \"username\": \"AG1HO8Iphkk\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
