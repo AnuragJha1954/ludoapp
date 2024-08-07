@@ -8,12 +8,13 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.utils import timezone
 from django.db.models import Sum, Count
+from django.shortcuts import get_object_or_404
 
 @swagger_auto_schema(
     method='get',
     responses={
         200: openapi.Response(
-            description="List of pending deposit history entries",
+            description="List of all deposit history entries",
             schema=openapi.Schema(
                 type=openapi.TYPE_ARRAY,
                 items=openapi.Schema(
@@ -50,41 +51,24 @@ from django.db.models import Sum, Count
 )
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_pending_deposits(request):
-    pending_deposits = DepositHistory.objects.filter(status='P')
-    serializer = DepositHistorySerializer(pending_deposits, many=True, context={'request': request})
-    return Response(serializer.data, status=status.HTTP_200_OK)
+def get_all_deposits(request):
+    # Fetch all deposits
+    all_deposits = DepositHistory.objects.all()
+    
+    # Separate deposits by status
+    pending_deposits = all_deposits.filter(status='P')
+    successful_deposits = all_deposits.filter(status='S')
+
+    # Serialize deposits
+    pending_deposits_data = DepositHistorySerializer(pending_deposits, many=True, context={'request': request}).data
+    successful_deposits_data = DepositHistorySerializer(successful_deposits, many=True, context={'request': request}).data
+
+    return Response({
+        "pending_deposits": pending_deposits_data,
+        "successful_deposits": successful_deposits_data
+    }, status=status.HTTP_200_OK)
 
 
-
-
-
-
-
-
-@swagger_auto_schema(
-    method='put',
-    request_body=UpdateDepositStatusSerializer,
-    responses={
-        200: 'Status updated to Successful',
-        400: 'Bad request',
-        404: 'Deposit not found',
-    }
-)
-@api_view(['PUT'])
-@permission_classes([AllowAny])
-def update_deposit_status(request, wallet_id):
-    serializer = UpdateDepositStatusSerializer(data=request.data)
-    if serializer.is_valid():
-        deposit_date = serializer.validated_data['deposit_date']
-        try:
-            deposit_entry = DepositHistory.objects.get(wallet_id=wallet_id, deposit_date=deposit_date)
-            deposit_entry.status = 'S'
-            deposit_entry.save()
-            return Response({'message': 'Status updated to Successful'}, status=status.HTTP_200_OK)
-        except DepositHistory.DoesNotExist:
-            return Response({'error': 'Deposit not found'}, status=status.HTTP_404_NOT_FOUND)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -107,28 +91,26 @@ def update_deposit_status(request, wallet_id):
 )
 @api_view(['PUT'])
 @permission_classes([AllowAny])
-def update_deposit_status(request, wallet_id):
-    serializer = UpdateDepositStatusSerializer(data=request.data)
-    if serializer.is_valid():
-        deposit_date = serializer.validated_data['deposit_date']
-        try:
-            deposit_entry = DepositHistory.objects.get(wallet_id=wallet_id, deposit_date=deposit_date)
-            if deposit_entry.status == 'S':
-                return Response({'message': 'Deposit is already marked as Successful'}, status=status.HTTP_200_OK)
-            
-            deposit_entry.status = 'S'
-            deposit_entry.save()
+def update_deposit_status(request, wallet_id, deposit_id):
+    # Fetch the wallet using wallet_id
+    wallet = get_object_or_404(Wallet, id=wallet_id)
+    
+    # Fetch the deposit entry using wallet_id and deposit_id
+    deposit_entry = get_object_or_404(DepositHistory, id=deposit_id, wallet=wallet)
 
-            # Update the wallet balance
-            wallet = deposit_entry.wallet
-            wallet.balance += deposit_entry.deposit_amount
-            wallet.save()
+    if deposit_entry.status == 'S':
+        return Response({'message': 'Deposit is already done to the wallet'}, status=status.HTTP_200_OK)
 
-            return Response({'message': 'Status updated to Successful and wallet balance updated'}, status=status.HTTP_200_OK)
-        except DepositHistory.DoesNotExist:
-            return Response({'error': 'Deposit not found'}, status=status.HTTP_404_NOT_FOUND)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # Update the deposit status and tag
+    deposit_entry.status = 'S'
+    deposit_entry.tag = 'D'
+    deposit_entry.save()
 
+    # Update the wallet balance
+    wallet.balance += deposit_entry.deposit_amount
+    wallet.save()
+
+    return Response({'message': 'Deposit Successful and wallet balance updated'}, status=status.HTTP_200_OK)
 
 
 
@@ -144,7 +126,7 @@ def update_deposit_status(request, wallet_id):
     method='get',
     responses={
         200: openapi.Response(
-            description="List of pending withdrawal history entries",
+            description="List of all withdrawal history entries",
             schema=openapi.Schema(
                 type=openapi.TYPE_ARRAY,
                 items=openapi.Schema(
@@ -179,10 +161,22 @@ def update_deposit_status(request, wallet_id):
 )
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_pending_withdrawals(request):
-    pending_withdrawals = WithdrawalHistory.objects.filter(status='P')
-    serializer = WithdrawalHistorySerializer(pending_withdrawals, many=True, context={'request': request})
-    return Response(serializer.data, status=status.HTTP_200_OK)
+def get_all_withdrawals(request):
+    # Fetch all withdrawals
+    all_withdrawals = WithdrawalHistory.objects.all()
+    
+    # Separate withdrawals by status
+    pending_withdrawals = all_withdrawals.filter(status='P')
+    successful_withdrawals = all_withdrawals.filter(status='S')
+
+    # Serialize withdrawals
+    pending_withdrawals_data = WithdrawalHistorySerializer(pending_withdrawals, many=True, context={'request': request}).data
+    successful_withdrawals_data = WithdrawalHistorySerializer(successful_withdrawals, many=True, context={'request': request}).data
+
+    return Response({
+        "pending_withdrawals": pending_withdrawals_data,
+        "successful_withdrawals": successful_withdrawals_data
+    }, status=status.HTTP_200_OK)
 
 
 
@@ -205,32 +199,35 @@ def get_pending_withdrawals(request):
 )
 @api_view(['PUT'])
 @permission_classes([AllowAny])
-def update_withdrawal_status(request, wallet_id):
-    serializer = UpdateWithdrawalStatusSerializer(data=request.body)
-    if serializer.is_valid():
-        withdrawal_date = serializer.validated_data['withdrawal_date']
-        try:
-            withdrawal_entry = WithdrawalHistory.objects.get(wallet_id=wallet_id, withdrawal_date=withdrawal_date)
-            if withdrawal_entry.status == 'S':
-                return Response({'message': 'Withdrawal is already marked as Successful'}, status=status.HTTP_200_OK)
-            
-            wallet = withdrawal_entry.wallet
-            if wallet.balance < withdrawal_entry.withdrawal_amount:
-                return Response({'error': 'Insufficient balance'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
-            
-            # Update the withdrawal status
-            withdrawal_entry.status = 'S'
-            withdrawal_entry.save()
-            
-            # Update the wallet balance
-            wallet.balance -= withdrawal_entry.withdrawal_amount
-            wallet.save()
+def update_withdrawal_status(request, wallet_id, withdrawal_id):
+    try:
+        # Fetch the wallet and withdrawal entry
+        wallet = Wallet.objects.get(id=wallet_id)
+        withdrawal_entry = WithdrawalHistory.objects.get(id=withdrawal_id, wallet=wallet)
+        
+        if withdrawal_entry.status == 'S':
+            return Response({'message': 'Withdrawal is already marked as Successful'}, status=status.HTTP_200_OK)
 
-            return Response({'message': 'Status updated to Successful and wallet balance updated'}, status=status.HTTP_200_OK)
-        except WithdrawalHistory.DoesNotExist:
-            return Response({'error': 'Withdrawal not found'}, status=status.HTTP_404_NOT_FOUND)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if wallet.withdrawable_balance < withdrawal_entry.withdrawal_amount:
+            return Response({'error': 'Insufficient balance'}, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+        
+        # Deduct the withdrawal amount from the wallet's withdrawable balance
+        wallet.withdrawable_balance -= withdrawal_entry.withdrawal_amount
+        wallet.save()
+        
+        # Update the withdrawal status
+        withdrawal_entry.status = 'S'
+        withdrawal_entry.save()
+        
 
+        return Response({'message': 'Status updated to Successful and wallet withdrawable balance updated'}, status=status.HTTP_200_OK)
+    
+    except Wallet.DoesNotExist:
+        return Response({'error': 'Wallet not found'}, status=status.HTTP_404_NOT_FOUND)
+    except WithdrawalHistory.DoesNotExist:
+        return Response({'error': 'Withdrawal not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
@@ -247,7 +244,7 @@ def update_withdrawal_status(request, wallet_id):
     method='get',
     responses={
         200: openapi.Response(
-            description="List of pending room results",
+            description="List of all room results",
             schema=openapi.Schema(
                 type=openapi.TYPE_ARRAY,
                 items=openapi.Schema(
@@ -288,10 +285,23 @@ def update_withdrawal_status(request, wallet_id):
 )
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def get_pending_room_results(request):
+def get_room_results(request):
+    # Fetch room results categorized by status
     pending_results = RoomResults.objects.filter(status='P')
-    serializer = RoomResultsSerializer(pending_results, many=True, context={'request': request})
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    approved_results = RoomResults.objects.filter(status='A')
+    declined_results = RoomResults.objects.filter(status='D')
+    
+    # Serialize the results
+    pending_results_data = RoomResultsSerializer(pending_results, many=True, context={'request': request}).data
+    approved_results_data = RoomResultsSerializer(approved_results, many=True, context={'request': request}).data
+    declined_results_data = RoomResultsSerializer(declined_results, many=True, context={'request': request}).data
+    
+    # Return the response
+    return Response({
+        "pending_results": pending_results_data,
+        "approved_results": approved_results_data,
+        "declined_results": declined_results_data,
+    }, status=status.HTTP_200_OK)
 
 
 
@@ -331,6 +341,7 @@ def update_room_results_status(request, room_id):
         
         # Update the wallet balance
         wallet.balance += room_amount
+        wallet.withdrawable_balance += room_amount
         wallet.save()
 
         return Response({'message': 'Status updated to Successful and wallet balance updated'}, status=status.HTTP_200_OK)

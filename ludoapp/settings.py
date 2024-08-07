@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'api',
     'adminapi',
     'userauth',
+    'kyc',
     'drf_yasg',
     'rest_framework.authtoken',
     'corsheaders',

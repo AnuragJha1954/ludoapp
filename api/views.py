@@ -341,6 +341,17 @@ def create_withdrawal(request, wallet_id):
         wallet = Wallet.objects.get(id=wallet_id)
     except Wallet.DoesNotExist:
         return Response({"error": True, "detail": "Wallet with the given ID not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Fetch the user associated with the wallet
+    user = wallet.user
+        
+    # Check if the user's KYC is approved
+    if not user.kyc:
+        return Response({
+            "error": True,
+            "detail": "KYC is still pending. Please get the KYC approved before making any withdrawal."
+        }, status=status.HTTP_400_BAD_REQUEST)
+            
 
     # Check if the wallet has sufficient balance
     withdrawal_amount_str = request.data.get('withdrawal_amount')

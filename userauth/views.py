@@ -398,6 +398,7 @@ def verify_otp(request):
                 "email": user.email,
                 "slug": slug,
                 "verified": user.verified,
+                "kyc":user.kyc,
                 "wallet": wallet_details,
                 "metric": metric,
             }

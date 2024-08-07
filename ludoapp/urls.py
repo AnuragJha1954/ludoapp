@@ -42,6 +42,7 @@ urlpatterns = [
     path('auth/', include('userauth.urls')),
     path('panel/', include('adminapi.urls')),
     path('user/', include('users.urls')),
+    path('kyc/', include('kyc.urls')),
     path('redoc/', schema_view.with_ui('redoc',cache_timeout=0), name='schema-redoc'),
     path('swagger/', schema_view.with_ui('swagger',cache_timeout=0), name='schema-swagger-ui'),
 ]
