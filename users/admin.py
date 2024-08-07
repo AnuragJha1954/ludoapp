@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CustomUser
+from .models import CustomUser,AdminDetails
 from django.contrib.auth.admin import UserAdmin
 
 class CustomUserAdmin(UserAdmin):
@@ -24,3 +24,13 @@ class CustomUserAdmin(UserAdmin):
 
 # Register your models here.
 admin.site.register(CustomUser, CustomUserAdmin)
+
+
+
+
+
+@admin.register(AdminDetails)
+class AdminDetailsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'commission_percentage', 'upi_name', 'upi_id', 'upi_qr')
+    search_fields = ('user__username', 'upi_id')
+    list_filter = ('commission_percentage',)

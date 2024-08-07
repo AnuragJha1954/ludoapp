@@ -93,6 +93,8 @@ class RoomResults(models.Model):
     proof_screenshot = models.ImageField(upload_to='winnings/', null=True, blank=True)
     challenge = models.ForeignKey('Challenge', on_delete=models.CASCADE)  # Added ForeignKey to Challenge
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default='P')
+    admin_commission = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)  # Added admin_commission field
+    timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Winner of Room {self.room_id} is user {self.user.username}"

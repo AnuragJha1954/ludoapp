@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from .serializers import CustomUserLoginSerializer
-from users.models import CustomUser
+from users.models import CustomUser, AdminDetails
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 import random
@@ -18,6 +18,7 @@ from api.models import Wallet
 from django.contrib.auth import get_user_model
 from .models import OTPDetails
 from .serializers import OTPRequestSerializer
+from adminapi.serializers import AdminDetailsSerializer
 import logging
 
 # Set up logging
@@ -358,6 +359,9 @@ def verify_otp(request):
                     status=status.HTTP_404_NOT_FOUND,
                 )
 
+            # Check if the user is an admin
+            is_admin = AdminDetails.objects.filter(user=user).exists()
+            
             # Generate or get token
             token, _ = Token.objects.get_or_create(user=user)
 
@@ -399,9 +403,18 @@ def verify_otp(request):
                 "slug": slug,
                 "verified": user.verified,
                 "kyc":user.kyc,
+                "is_admin": is_admin,  # Include the is_admin field
                 "wallet": wallet_details,
                 "metric": metric,
             }
+            
+            if is_admin:
+                try:
+                    admin_details = AdminDetails.objects.get(user=user)
+                    admin_serializer = AdminDetailsSerializer(admin_details, context={'request': request})
+                    user_details.update({"admin_details": admin_serializer.data})
+                except AdminDetails.DoesNotExist:
+                    pass  # No admin details to add if it doesn't exist
 
             return Response(
                 {

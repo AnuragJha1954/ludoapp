@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from api.models import DepositHistory, WithdrawalHistory, RoomResults
+from users.models import AdminDetails
+
 
 class DepositHistorySerializer(serializers.ModelSerializer):
     proof_screenshot_url = serializers.SerializerMethodField()
@@ -72,5 +74,43 @@ class UpdateRoomResultsStatusSerializer(serializers.Serializer):
 
 
 
+
+class CommissionPercentageSerializer(serializers.Serializer):
+    commission_percentage = serializers.DecimalField(max_digits=5, decimal_places=2)
+
+
+
+
+
+
+
+
+class WhatsAppNumberSerializer(serializers.Serializer):
+    whatsapp_number = serializers.CharField(max_length=15)
+
+
+
+
+class UPIInfoSerializer(serializers.Serializer):
+    upi_name = serializers.CharField(max_length=255)
+    upi_id = serializers.CharField(max_length=255)
+
+
+
+
+
+
+class AdminDetailsSerializer(serializers.ModelSerializer):
+    upi_qr_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AdminDetails
+        fields = ['user', 'commission_percentage', 'upi_name', 'upi_id', 'upi_qr_url']
+
+    def get_upi_qr_url(self, obj):
+        request = self.context.get('request')
+        if obj.upi_qr and hasattr(obj.upi_qr, 'url'):
+            return request.build_absolute_uri(obj.upi_qr.url)
+        return None
 
 
