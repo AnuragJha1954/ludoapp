@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "032acb53-9dc8-43d1-a4e9-287793430e7e",
+		"_postman_id": "c0ddf6da-6770-45cd-bcbc-48cbd2a684f7",
 		"name": "LudoApp API",
 		"description": "API documentation for the LudoApp project\n\nContact Support:\n Email: anurag2001jha@gmail.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -2700,7 +2700,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"D\"\n  },\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"P\"\n  }\n]"
+									"body": "[\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"A\"\n  },\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"A\"\n  }\n]"
 								},
 								{
 									"name": "Invalid input",
@@ -2758,7 +2758,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
+											"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"D\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -2808,7 +2808,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"D\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2844,7 +2844,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}"
+											"body": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"D\"\n}"
 										},
 										{
 											"name": "Invalid input",
@@ -2863,7 +2863,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"D\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2913,7 +2913,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"D\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -3944,6 +3944,300 @@
 					]
 				},
 				{
+					"name": "deposit",
+					"item": [
+						{
+							"name": "{user_id}",
+							"item": [
+								{
+									"name": "panel deposit create",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"deposit_amount\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/panel/deposit/:user_id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"deposit",
+												":user_id",
+												""
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Deposit an amount to a user's wallet by an admin and create a deposit history entry with the tag 'Admin Deposit'."
+									},
+									"response": [
+										{
+											"name": "Deposit successful",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"deposit_amount\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/deposit/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"deposit",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": false,\n        \"detail\": \"100.00 has been added to the wallet of user1\",\n        \"new_balance\": \"500.00\"\n      }\n    }\n  }\n}"
+										},
+										{
+											"name": "Bad Request",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"deposit_amount\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/deposit/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"deposit",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Bad Request",
+											"code": 400,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": true,\n        \"detail\": \"Deposit amount is required\"\n      }\n    }\n  }\n}"
+										},
+										{
+											"name": "Not Found",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"deposit_amount\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/deposit/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"deposit",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": true,\n        \"detail\": \"Not found.\"\n      }\n    }\n  }\n}"
+										},
+										{
+											"name": "Internal Server Error",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"deposit_amount\": \"<string>\"\n}",
+													"options": {
+														"raw": {
+															"headerFamily": "json",
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/panel/deposit/:user_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"deposit",
+														":user_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "user_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": true,\n        \"detail\": \"An error occurred while processing the deposit.\"\n      }\n    }\n  }\n}"
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
 					"name": "get-admin-details",
 					"item": [
 						{
@@ -4554,7 +4848,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"S\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"room\": {\n      \"id\": \"<integer>\",\n      \"room_amount\": \"<string>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      }\n    },\n    \"user\": {\n      \"id\": \"<integer>\",\n      \"username\": \"<string>\"\n    },\n    \"proof_screenshot\": \"<uri>\",\n    \"status\": \"P\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -4585,6 +4879,115 @@
 									"header": [],
 									"cookie": [],
 									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "get-users",
+					"item": [
+						{
+							"name": "panel get-users list",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/panel/get-users/",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"panel",
+										"get-users",
+										""
+									]
+								},
+								"description": "List all users excluding those who are in the AdminDetails table."
+							},
+							"response": [
+								{
+									"name": "List of non-admin users retrieved successfully",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Basic <credentials>",
+												"description": "Added as a part of security scheme: basic"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/panel/get-users/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"get-users",
+												""
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": false,\n        \"detail\": \"Non-admin users retrieved successfully\",\n        \"users\": [\n          {\n            \"id\": 1,\n            \"username\": \"user1\",\n            \"phone_number\": \"1234567890\",\n            \"verified\": true,\n            \"kyc\": false\n          },\n          {\n            \"id\": 2,\n            \"username\": \"user2\",\n            \"phone_number\": \"0987654321\",\n            \"verified\": false,\n            \"kyc\": true\n          }\n        ]\n      }\n    }\n  }\n}"
+								},
+								{
+									"name": "Internal Server Error",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"value": "Basic <credentials>",
+												"description": "Added as a part of security scheme: basic"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/panel/get-users/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"get-users",
+												""
+											]
+										}
+									},
+									"status": "Internal Server Error",
+									"code": 500,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": true,\n        \"detail\": \"An error occurred while retrieving non-admin users.\"\n      }\n    }\n  }\n}"
 								}
 							]
 						}
@@ -4653,7 +5056,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"S\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"S\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -4753,7 +5156,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_counts\": {\n    \"in77\": \"<integer>\",\n    \"Excepteurc7\": \"<integer>\"\n  }\n}"
+									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_counts\": {\n    \"sint_c\": \"<integer>\",\n    \"tempor_db\": \"<integer>\",\n    \"sunt2e1\": \"<integer>\",\n    \"sunt_4a\": \"<integer>\"\n  }\n}"
 								},
 								{
 									"name": "Error response",
@@ -4971,7 +5374,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_totals\": {\n    \"est_6df\": \"<string>\",\n    \"Ut_216\": \"<string>\",\n    \"dolore_dd_\": \"<string>\"\n  }\n}"
+									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_totals\": {\n    \"occaecat_33\": \"<string>\",\n    \"reprehenderit_ab\": \"<string>\"\n  }\n}"
 								},
 								{
 									"name": "Error response",
@@ -5548,7 +5951,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"username\": \"aNefP\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+									"raw": "{\n  \"username\": \"7YXo74gb_O\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -5591,7 +5994,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"aNefP\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+											"raw": "{\n  \"username\": \"7YXo74gb_O\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -5644,7 +6047,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"aNefP\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+											"raw": "{\n  \"username\": \"7YXo74gb_O\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
