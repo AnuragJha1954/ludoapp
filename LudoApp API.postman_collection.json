@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "64795a8a-526e-4a3f-90de-3905afc9f96e",
+		"_postman_id": "032acb53-9dc8-43d1-a4e9-287793430e7e",
 		"name": "LudoApp API",
 		"description": "API documentation for the LudoApp project\n\nContact Support:\n Email: anurag2001jha@gmail.com",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
@@ -2700,7 +2700,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"P\"\n  },\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"D\"\n  }\n]"
+									"body": "[\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"D\"\n  },\n  {\n    \"full_name\": \"<string>\",\n    \"document_number\": \"<string>\",\n    \"front_side\": \"<uri>\",\n    \"back_side\": \"<uri>\",\n    \"status\": \"P\"\n  }\n]"
 								},
 								{
 									"name": "Invalid input",
@@ -2758,7 +2758,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}",
+											"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -2808,7 +2808,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2844,7 +2844,7 @@
 												}
 											],
 											"cookie": [],
-											"body": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}"
+											"body": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}"
 										},
 										{
 											"name": "Invalid input",
@@ -2863,7 +2863,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -2913,7 +2913,7 @@
 												],
 												"body": {
 													"mode": "raw",
-													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"A\"\n}",
+													"raw": "{\n  \"full_name\": \"<string>\",\n  \"document_number\": \"<string>\",\n  \"front_side\": \"<uri>\",\n  \"back_side\": \"<uri>\",\n  \"status\": \"P\"\n}",
 													"options": {
 														"raw": {
 															"headerFamily": "json",
@@ -4105,6 +4105,185 @@
 					]
 				},
 				{
+					"name": "get-challenge-details",
+					"item": [
+						{
+							"name": "{challenge_id}",
+							"item": [
+								{
+									"name": "panel get-challenge-details read",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/panel/get-challenge-details/:challenge_id/",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"panel",
+												"get-challenge-details",
+												":challenge_id",
+												""
+											],
+											"variable": [
+												{
+													"key": "challenge_id",
+													"value": "<string>",
+													"description": "(Required) "
+												}
+											]
+										},
+										"description": "Retrieve challenge details including room, created_by, and opponent."
+									},
+									"response": [
+										{
+											"name": "Challenge details retrieved successfully",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/panel/get-challenge-details/:challenge_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"get-challenge-details",
+														":challenge_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "challenge_id"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": false,\n        \"detail\": \"Challenge details retrieved successfully\",\n        \"challenge\": {\n          \"challenge_id\": \"CH12345\",\n          \"room\": {\n            \"room_id\": 1,\n            \"room_amount\": \"100.00\"\n          },\n          \"created_by\": {\n            \"id\": 2,\n            \"username\": \"creator_username\",\n            \"phone_number\": \"1234567890\",\n            \"verified\": true,\n            \"kyc\": false\n          },\n          \"opponent\": {\n            \"id\": 3,\n            \"username\": \"opponent_username\",\n            \"phone_number\": \"0987654321\",\n            \"verified\": true,\n            \"kyc\": true\n          },\n          \"status\": \"O\"\n        }\n      }\n    }\n  }\n}"
+										},
+										{
+											"name": "Challenge not found",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/panel/get-challenge-details/:challenge_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"get-challenge-details",
+														":challenge_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "challenge_id"
+														}
+													]
+												}
+											},
+											"status": "Not Found",
+											"code": 404,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": true,\n        \"detail\": \"Challenge not found\"\n      }\n    }\n  }\n}"
+										},
+										{
+											"name": "Internal Server Error",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													},
+													{
+														"key": "Authorization",
+														"value": "Basic <credentials>",
+														"description": "Added as a part of security scheme: basic"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/panel/get-challenge-details/:challenge_id/",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"panel",
+														"get-challenge-details",
+														":challenge_id",
+														""
+													],
+													"variable": [
+														{
+															"key": "challenge_id"
+														}
+													]
+												}
+											},
+											"status": "Internal Server Error",
+											"code": 500,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n  \"examples\": {\n    \"response\": {\n      \"value\": {\n        \"error\": true,\n        \"detail\": \"An error occurred while retrieving challenge details.\"\n      }\n    }\n  }\n}"
+										}
+									]
+								}
+							]
+						}
+					]
+				},
+				{
 					"name": "get-commisions",
 					"item": [
 						{
@@ -4276,7 +4455,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"deposit_amount\": \"<string>\",\n    \"deposit_date\": \"<dateTime>\",\n    \"status\": \"S\",\n    \"proof_screenshot\": \"<uri>\",\n    \"proof_screenshot_url\": \"<uri>\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"deposit_amount\": \"<string>\",\n    \"deposit_date\": \"<dateTime>\",\n    \"status\": \"S\",\n    \"proof_screenshot\": \"<uri>\",\n    \"proof_screenshot_url\": \"<uri>\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"deposit_amount\": \"<string>\",\n    \"deposit_date\": \"<dateTime>\",\n    \"status\": \"S\",\n    \"proof_screenshot\": \"<uri>\",\n    \"proof_screenshot_url\": \"<uri>\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"deposit_amount\": \"<string>\",\n    \"deposit_date\": \"<dateTime>\",\n    \"status\": \"P\",\n    \"proof_screenshot\": \"<uri>\",\n    \"proof_screenshot_url\": \"<uri>\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -4474,7 +4653,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"S\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  }\n]"
+									"body": "[\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  },\n  {\n    \"id\": \"<integer>\",\n    \"wallet\": {\n      \"id\": \"<integer>\",\n      \"user\": {\n        \"id\": \"<integer>\",\n        \"username\": \"<string>\"\n      },\n      \"balance\": \"<string>\",\n      \"last_modified\": \"<dateTime>\"\n    },\n    \"withdrawal_amount\": \"<string>\",\n    \"withdrawal_date\": \"<dateTime>\",\n    \"status\": \"P\"\n  }\n]"
 								},
 								{
 									"name": "Bad request",
@@ -4574,7 +4753,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_counts\": {\n    \"incididunt_b86\": \"<integer>\",\n    \"sit0e\": \"<integer>\",\n    \"eiusmod43\": \"<integer>\"\n  }\n}"
+									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_counts\": {\n    \"in77\": \"<integer>\",\n    \"Excepteurc7\": \"<integer>\"\n  }\n}"
 								},
 								{
 									"name": "Error response",
@@ -4792,7 +4971,7 @@
 										}
 									],
 									"cookie": [],
-									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_totals\": {\n    \"nulla05f\": \"<string>\",\n    \"veniam3\": \"<string>\",\n    \"amet1\": \"<string>\"\n  }\n}"
+									"body": "{\n  \"error\": \"<boolean>\",\n  \"detail\": \"<string>\",\n  \"status_totals\": {\n    \"est_6df\": \"<string>\",\n    \"Ut_216\": \"<string>\",\n    \"dolore_dd_\": \"<string>\"\n  }\n}"
 								},
 								{
 									"name": "Error response",
@@ -5369,7 +5548,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"username\": \"Nfsp3Ifsmu9\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+									"raw": "{\n  \"username\": \"aNefP\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -5412,7 +5591,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"Nfsp3Ifsmu9\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+											"raw": "{\n  \"username\": \"aNefP\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
@@ -5465,7 +5644,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n  \"username\": \"Nfsp3Ifsmu9\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
+											"raw": "{\n  \"username\": \"aNefP\",\n  \"email\": \"<email>\",\n  \"phone_number\": \"<string>\",\n  \"verified\": \"<boolean>\"\n}",
 											"options": {
 												"raw": {
 													"headerFamily": "json",
