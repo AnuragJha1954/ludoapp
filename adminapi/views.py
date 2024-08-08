@@ -432,25 +432,25 @@ def get_deposit_summary(request):
         now = timezone.now()
         start_of_today = now.replace(hour=0, minute=0, second=0, microsecond=0)
 
-        # Sum up all deposits with status 'S' (Successful)
-        total_deposits_successful = DepositHistory.objects.filter(status='S').aggregate(total=Sum('deposit_amount'))['total'] or 0
+        # Sum up all deposits (regardless of status)
+        upi_total = DepositHistory.objects.aggregate(total=Sum('deposit_amount'))['total'] or 0
 
-        # Sum up deposits for the current day with status 'S' (Successful)
-        today_deposits_successful = DepositHistory.objects.filter(
-            status='S',
+        # Sum up deposits for the current day
+        today_total = DepositHistory.objects.filter(
             deposit_date__gte=start_of_today
         ).aggregate(total=Sum('deposit_amount'))['total'] or 0
 
         # Construct the response data
         response_data = {
-            "total_deposits_successful": str(total_deposits_successful),
-            "today_deposits_successful": str(today_deposits_successful),
+            "upi_total": str(upi_total),
+            "today": str(today_total),
+            "admin":str(0)
         }
 
-        return Response(response_data, status=status.HTTP_200_OK)
+        return Response({"error":False,"detail": "Deposits retreived successfully",** response_data}, status=status.HTTP_200_OK)
 
     except Exception as e:
-        return Response({"error": str(e), "detail": "An error occurred while retrieving deposit summary."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response({"error": True, "detail":  str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
@@ -519,13 +519,24 @@ def list_challenges_status(request):
         # Aggregate the number of challenges by status
         status_counts = Challenge.objects.values('status').annotate(count=Count('status'))
 
-        # Prepare the response data
-        response_data = {status: count for status, count in status_counts}
+        # Map status codes to human-readable labels
+        status_mapping = {
+            'O': 'open',
+            'R': 'running',
+            'C': 'closed'
+        }
+
+        # Prepare the response data with default counts as 0
+        response_data = {'open': 0, 'running': 0, 'closed': 0}
+        for entry in status_counts:
+            status_key = status_mapping.get(entry['status'])
+            if status_key:
+                response_data[status_key] = entry['count']
 
         return Response({
             "error": False,
             "detail": "Challenge counts retrieved successfully",
-            "status_counts": response_data
+            ** response_data
         }, status=status.HTTP_200_OK)
     
     except Exception as e:
@@ -597,18 +608,28 @@ def list_challenges_status(request):
 @permission_classes([AllowAny])
 def total_withdrawals_status(request):
     try:
-        # Aggregate the total withdrawal amount by status
+        # Aggregate the total withdrawal amounts by status
         status_totals = WithdrawalHistory.objects.values('status').annotate(total_amount=Sum('withdrawal_amount'))
 
         # Prepare the response data
-        response_data = {status: str(total_amount) for status, total_amount in status_totals}
+        response_data = {
+            "pending": "0.00",
+            "successful": "0.00"
+        }
+
+        # Map status codes to response keys and update the totals
+        for status_total in status_totals:
+            if status_total['status'] == 'P':
+                response_data['pending'] = str(status_total['total_amount'])
+            elif status_total['status'] == 'S':
+                response_data['successful'] = str(status_total['total_amount'])
 
         return Response({
             "error": False,
             "detail": "Total withdrawal amounts retrieved successfully",
-            "status_totals": response_data
+            ** response_data
         }, status=status.HTTP_200_OK)
-    
+
     except Exception as e:
         return Response({
             "error": True,
@@ -666,8 +687,9 @@ def get_admin_commission(request):
         )['today_commission'] or 0.00
 
         return Response({
-            'overall_commission': overall_commission,
-            'today_commission': today_commission
+            'admin': overall_commission,
+            'today': today_commission,
+            'referal':0
         }, status=status.HTTP_200_OK)
 
     except Exception as e:
