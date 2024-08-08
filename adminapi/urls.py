@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import get_all_deposits,update_deposit_status,get_all_withdrawals,update_withdrawal_status,get_room_results, update_room_results_status,total_withdrawals_status,get_deposit_summary, list_challenges_status, get_admin_commission, change_commission_percentage, update_whatsapp_number,update_upi_details,get_admin_details
+from .views import get_all_deposits,update_deposit_status,get_all_withdrawals,update_withdrawal_status,get_room_results, update_room_results_status,total_withdrawals_status,get_deposit_summary, list_challenges_status, get_admin_commission, change_commission_percentage, update_whatsapp_number,update_upi_details,get_admin_details,get_challenge_details
 
 urlpatterns = [
     path('get-deposits/', get_all_deposits, name='get-all-deposits'),
@@ -16,5 +16,6 @@ urlpatterns = [
     path('update-whatsapp-number/<int:user_id>/', update_whatsapp_number, name='update-whatsapp-number'),
     path('update-upi/<int:user_id>/', update_upi_details, name='update-upi-details'),
     path('get-admin-details/<int:user_id>/', get_admin_details, name='get-admin-details'),
+    path('get-challenge-details/<str:challenge_id>/', get_challenge_details, name='challenge-details'),
      
 ]

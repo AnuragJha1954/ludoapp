@@ -1,7 +1,9 @@
 from rest_framework import serializers
-from api.models import DepositHistory, WithdrawalHistory, RoomResults
+from api.models import DepositHistory, WithdrawalHistory, RoomResults,Room,Challenge
 from users.models import AdminDetails
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
 class DepositHistorySerializer(serializers.ModelSerializer):
     proof_screenshot_url = serializers.SerializerMethodField()
@@ -114,3 +116,25 @@ class AdminDetailsSerializer(serializers.ModelSerializer):
         return None
 
 
+
+
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'phone_number', 'verified', 'kyc']
+
+class RoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ['room_id', 'room_amount']
+
+class ChallengeDetailSerializer(serializers.ModelSerializer):
+    created_by = UserSerializer()
+    opponent = UserSerializer()
+    room = RoomSerializer()
+
+    class Meta:
+        model = Challenge
+        fields = ['challenge_id', 'room', 'created_by', 'opponent', 'status']

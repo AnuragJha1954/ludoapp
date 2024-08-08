@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from .serializers import DepositHistorySerializer, UpdateDepositStatusSerializer, WithdrawalHistorySerializer, UpdateWithdrawalStatusSerializer,RoomResultsSerializer,UpdateRoomResultsStatusSerializer,CommissionPercentageSerializer,WhatsAppNumberSerializer,UPIInfoSerializer, AdminDetailsSerializer
+from .serializers import DepositHistorySerializer, UpdateDepositStatusSerializer, WithdrawalHistorySerializer, UpdateWithdrawalStatusSerializer,RoomResultsSerializer,UpdateRoomResultsStatusSerializer,CommissionPercentageSerializer,WhatsAppNumberSerializer,UPIInfoSerializer, AdminDetailsSerializer, ChallengeDetailSerializer
 from api.models import DepositHistory,Wallet, WithdrawalHistory, RoomResults, Challenge
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -796,6 +796,7 @@ def change_commission_percentage(request, user_id):
     }
 )
 @api_view(['PUT'])
+@permission_classes([AllowAny])
 def update_whatsapp_number(request, user_id):
     try:
         whatsapp_number = request.data.get('whatsapp_number')
@@ -854,6 +855,7 @@ def update_whatsapp_number(request, user_id):
     }
 )
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def update_upi_details(request, user_id):
     try:
         data = request.data
@@ -923,6 +925,7 @@ def update_upi_details(request, user_id):
     }
 )
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def get_admin_details(request, user_id):
     try:
         admin_details = AdminDetails.objects.get(user_id=user_id)
@@ -946,6 +949,99 @@ def get_admin_details(request, user_id):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="Retrieve challenge details including room, created_by, and opponent.",
+    responses={
+        200: openapi.Response(
+            description="Challenge details retrieved successfully",
+            examples={
+                "application/json": {
+                    "error": False,
+                    "detail": "Challenge details retrieved successfully",
+                    "challenge": {
+                        "challenge_id": "CH12345",
+                        "room": {
+                            "room_id": 1,
+                            "room_amount": "100.00"
+                        },
+                        "created_by": {
+                            "id": 2,
+                            "username": "creator_username",
+                            "phone_number": "1234567890",
+                            "verified": True,
+                            "kyc": False
+                        },
+                        "opponent": {
+                            "id": 3,
+                            "username": "opponent_username",
+                            "phone_number": "0987654321",
+                            "verified": True,
+                            "kyc": True
+                        },
+                        "status": "O"
+                    }
+                }
+            }
+        ),
+        404: openapi.Response(
+            description="Challenge not found",
+            examples={
+                "application/json": {
+                    "error": True,
+                    "detail": "Challenge not found"
+                }
+            }
+        ),
+        500: openapi.Response(
+            description="Internal Server Error",
+            examples={
+                "application/json": {
+                    "error": True,
+                    "detail": "An error occurred while retrieving challenge details."
+                }
+            }
+        ),
+    }
+)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def get_challenge_details(request, challenge_id):
+    try:
+        # Retrieve the challenge by its ID
+        challenge = Challenge.objects.get(challenge_id=challenge_id)
+
+        # Serialize the challenge details
+        serializer = ChallengeDetailSerializer(challenge)
+
+        return Response({
+            "error": False,
+            "detail": "Challenge details retrieved successfully",
+            "challenge": serializer.data
+        }, status=status.HTTP_200_OK)
+
+    except Challenge.DoesNotExist:
+        return Response({
+            "error": True,
+            "detail": "Challenge not found"
+        }, status=status.HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        return Response({
+            "error": True,
+            "detail": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
