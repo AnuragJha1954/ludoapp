@@ -440,12 +440,17 @@ def get_deposit_summary(request):
         today_total = DepositHistory.objects.filter(
             deposit_date__gte=start_of_today
         ).aggregate(total=Sum('deposit_amount'))['total'] or 0
+        
+        # Sum up deposits with the tag 'Admin Deposit'
+        admin_total = DepositHistory.objects.filter(
+            tag='A'
+        ).aggregate(total=Sum('deposit_amount'))['total'] or 0
 
         # Construct the response data
         response_data = {
             "upi_total": str(upi_total),
             "today": str(today_total),
-            "admin":str(0)
+            "admin": str(admin_total),
         }
 
         return Response({"error":False,"detail": "Deposits retreived successfully",** response_data}, status=status.HTTP_200_OK)
