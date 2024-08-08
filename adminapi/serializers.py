@@ -123,7 +123,7 @@ class AdminDetailsSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'phone_number', 'verified', 'kyc']
+        fields = ['id', 'username', 'phone_number', 'verified', 'kyc', 'email', 'first_name','last_name']
 
 class RoomSerializer(serializers.ModelSerializer):
     class Meta:

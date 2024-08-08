@@ -28,6 +28,7 @@ class DepositHistory(models.Model):
     TAG_CHOICES = [
         ('W', 'Winning'),
         ('D', 'Deposit'),
+        ('A', 'Admin Deposit'),
     ]
 
     wallet = models.ForeignKey('Wallet', on_delete=models.CASCADE)

@@ -2,18 +2,19 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import AllowAny
-from .serializers import DepositHistorySerializer, UpdateDepositStatusSerializer, WithdrawalHistorySerializer, UpdateWithdrawalStatusSerializer,RoomResultsSerializer,UpdateRoomResultsStatusSerializer,CommissionPercentageSerializer,WhatsAppNumberSerializer,UPIInfoSerializer, AdminDetailsSerializer, ChallengeDetailSerializer
+from .serializers import DepositHistorySerializer, UpdateDepositStatusSerializer, WithdrawalHistorySerializer, UpdateWithdrawalStatusSerializer,RoomResultsSerializer,UpdateRoomResultsStatusSerializer,CommissionPercentageSerializer,WhatsAppNumberSerializer,UPIInfoSerializer, AdminDetailsSerializer, ChallengeDetailSerializer, UserSerializer
 from api.models import DepositHistory,Wallet, WithdrawalHistory, RoomResults, Challenge
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from django.utils import timezone
-from django.db.models import Sum, Count
+from django.db.models import Sum, Count, Subquery
 from django.shortcuts import get_object_or_404
-from users.models import AdminDetails
+from users.models import AdminDetails, CustomUser
 from django.utils.timezone import now
 import qrcode
 from io import BytesIO
 from django.core.files.base import ContentFile
+from decimal import Decimal
 
 
 
@@ -1042,6 +1043,207 @@ def get_challenge_details(request, challenge_id):
             "error": True,
             "detail": str(e)
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+
+
+
+
+@swagger_auto_schema(
+    method='get',
+    operation_description="List all users excluding those who are in the AdminDetails table.",
+    responses={
+        200: openapi.Response(
+            description="List of non-admin users retrieved successfully",
+            examples={
+                "application/json": {
+                    "error": False,
+                    "detail": "Non-admin users retrieved successfully",
+                    "users": [
+                        {
+                            "id": 1,
+                            "username": "user1",
+                            "phone_number": "1234567890",
+                            "verified": True,
+                            "kyc": False
+                        },
+                        {
+                            "id": 2,
+                            "username": "user2",
+                            "phone_number": "0987654321",
+                            "verified": False,
+                            "kyc": True
+                        }
+                    ]
+                }
+            }
+        ),
+        500: openapi.Response(
+            description="Internal Server Error",
+            examples={
+                "application/json": {
+                    "error": True,
+                    "detail": "An error occurred while retrieving non-admin users."
+                }
+            }
+        ),
+    }
+)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def list_non_admin_users(request):
+    try:
+        # Subquery to get all user IDs that are in the AdminDetails table
+        admin_user_ids = AdminDetails.objects.values('user_id')
+
+        # Exclude users that are in the AdminDetails table
+        non_admin_users = CustomUser.objects.exclude(id__in=Subquery(admin_user_ids)).exclude(is_superuser=True)
+
+        # Serialize the user data
+        serializer = UserSerializer(non_admin_users, many=True)
+
+        return Response({
+            "error": False,
+            "detail": "Non-admin users retrieved successfully",
+            "users": serializer.data
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({
+            "error": True,
+            "detail": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@swagger_auto_schema(
+    method='post',
+    operation_description="Deposit an amount to a user's wallet by an admin and create a deposit history entry with the tag 'Admin Deposit'.",
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'deposit_amount': openapi.Schema(type=openapi.TYPE_STRING, description='Amount to deposit'),
+        },
+        required=['deposit_amount'],
+    ),
+    responses={
+        200: openapi.Response(
+            description="Deposit successful",
+            examples={
+                "application/json": {
+                    "error": False,
+                    "detail": "100.00 has been added to the wallet of user1",
+                    "new_balance": "500.00"
+                }
+            }
+        ),
+        400: openapi.Response(
+            description="Bad Request",
+            examples={
+                "application/json": {
+                    "error": True,
+                    "detail": "Deposit amount is required"
+                }
+            }
+        ),
+        404: openapi.Response(
+            description="Not Found",
+            examples={
+                "application/json": {
+                    "error": True,
+                    "detail": "Not found."
+                }
+            }
+        ),
+        500: openapi.Response(
+            description="Internal Server Error",
+            examples={
+                "application/json": {
+                    "error": True,
+                    "detail": "An error occurred while processing the deposit."
+                }
+            }
+        ),
+    }
+)
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def admin_deposit(request, user_id):
+    try:
+        # Get the user by ID
+        user = get_object_or_404(CustomUser, id=user_id)
+
+        # Get the deposit amount from the request body
+        deposit_amount = request.data.get('deposit_amount')
+        if not deposit_amount:
+            return Response({
+                "error": True,
+                "detail": "Deposit amount is required"
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Convert deposit amount to decimal
+        deposit_amount = Decimal(deposit_amount)
+
+        # Get the user's wallet
+        wallet = get_object_or_404(Wallet, user=user)
+
+        # Update the wallet balance
+        wallet.balance += deposit_amount
+        wallet.save()
+
+        # Create a deposit history entry with the tag 'Admin Deposit'
+        DepositHistory.objects.create(
+            wallet=wallet,
+            deposit_amount=deposit_amount,
+            status='S',
+            tag='A'  # Tag for Admin Deposit
+        )
+
+        return Response({
+            "error": False,
+            "detail": f"{deposit_amount} has been added to the wallet of {user.username}",
+            "new_balance": str(wallet.balance)
+        }, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({
+            "error": True,
+            "detail": str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
